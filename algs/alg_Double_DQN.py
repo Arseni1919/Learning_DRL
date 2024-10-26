@@ -1,3 +1,7 @@
+from algs.alg_Double_DQN_sup import *
+from algs.alg_DQN_sup import *
+
+
 import matplotlib.pyplot as plt
 import torch
 from torch.onnx.symbolic_opset11 import unsqueeze
@@ -27,7 +31,9 @@ def optimize_model(
     state_action_values = policy_net(state_batch).gather(1, action_batch)
     next_state_values = torch.zeros(BATCH_SIZE, device=device)
     with torch.no_grad():
-        next_state_values[non_final_mask] = target_net(non_final_next_states).max(1).values
+        policy_actions = policy_net(non_final_next_states).argmax(1).unsqueeze(1)
+        next_state_values[non_final_mask] = target_net(non_final_next_states).gather(1, policy_actions).squeeze()
+        # next_state_values[non_final_mask] = target_net(non_final_next_states).max(1).values
     expected_state_action_values = reward_batch + (next_state_values * GAMMA)
     criterion = nn.SmoothL1Loss()
     loss: nn.Module = criterion(state_action_values, expected_state_action_values.unsqueeze(1))
