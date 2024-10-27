@@ -120,6 +120,7 @@ def main():
                 plot_sr(ax[0], info={'episode_durations': episode_durations})
                 plt.pause(plot_rate)
                 break
+            
 
     print('Complete')
     env.close()

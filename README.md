@@ -7,14 +7,14 @@ Gradient:
 Pseudo-code:
 ![](pics/dqn1.png)
 
-### 
-### 
-### 
+### Double DQN
+### REINFORCE
+### Actor-Critic
 ### 
 
 ## Credits
 
-- []()
+- [PyTorch | REINFORCE, Actor-Critic Examples](https://github.com/pytorch/examples/tree/main/reinforcement_learning)
 - []()
 - []()
 - []()

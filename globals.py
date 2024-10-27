@@ -22,8 +22,12 @@ import gymnasium as gym
 
 import torch
 import torch.nn as nn
+from torch import Tensor
+import torch.distributions
 import torch.optim as optim
+from torch.nn import Sequential
 import torch.nn.functional as F
+from torch.distributions import Categorical
 
 
 
