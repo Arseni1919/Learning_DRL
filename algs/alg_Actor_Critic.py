@@ -1,16 +1,19 @@
+import matplotlib.pyplot as plt
+
 from algs.alg_Actor_Critic_sup import *
 from plot_functions import *
+from global_functions import *
 
 
 def main():
     # parameters
     GAMMA = 0.99
-    LR = 3e-2
+    LR = 3e-3
     EPS = np.finfo(np.float32).eps.item()
-    running_reward = 0
-    reward_threshold = 400
-    render_mode = "human"  # "human" / "rgb_array" / None
-    # render_mode = None
+    running_reward = 10
+    reward_threshold = 450
+    # render_mode = "human"  # "human" / "rgb_array" / None
+    render_mode = None
     device = torch.device(
         "cuda" if torch.cuda.is_available() else
         "mps" if torch.backends.mps.is_available() else
@@ -58,11 +61,17 @@ def main():
             'running_rewards': running_rewards,
         })
         plt.pause(plot_rate)
+        if i_episode % 50 == 0 and i_episode > 0:
+            run_CartPole(select_action, ac_net, device)
+
 
         # stop condition
         if running_reward > reward_threshold:
             print(f'Solved. Avr. reward is above {reward_threshold}.')
             break
+
+    run_CartPole(select_action, ac_net, device, n_episodes=10)
+    plt.show()
 
 
 if __name__ == '__main__':
