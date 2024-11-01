@@ -5,7 +5,7 @@ import time
 # env = gym.make('Ant-v5', render_mode="human")
 # env = gym.make('HalfCheetah-v5', ctrl_cost_weight=0.1, render_mode="human")
 # env = gym.make('InvertedPendulum-v5', reset_noise_scale=0.1, render_mode="human")
-env = gym.make('InvertedDoublePendulum-v5', reset_noise_scale=0.1, render_mode="human")
+env = gym.make('InvertedDoublePendulum-v5', reset_noise_scale=0.1, render_mode='human')
 
 # Reset the environment to get the initial state
 obs, info = env.reset()
