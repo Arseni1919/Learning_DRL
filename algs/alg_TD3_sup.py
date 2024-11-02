@@ -125,8 +125,9 @@ class TD3:
 
         with torch.no_grad():
             next_actions: torch.Tensor = self.actor_target(next_states)
-            # noise = torch.normal(0, 0.2, size=next_actions.shape)
-            # next_actions = torch.clip(next_actions + noise, -1, 1)
+            noise = torch.normal(0, 0.2, size=next_actions.shape)
+            noise = torch.clip(noise, -0.5, 0.5)
+            next_actions = torch.clip(next_actions + noise, -1, 1)
             target1_q_values = self.critic1_target(next_states, next_actions)
             target2_q_values = self.critic2_target(next_states, next_actions)
             min_target = torch.min(target1_q_values, target2_q_values)

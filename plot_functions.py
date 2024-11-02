@@ -5,6 +5,7 @@ def plot_episode_durations(ax, info):
     ax.cla()
     episode_durations = info['episode_durations']
     running_rewards = info['running_rewards']
+    env_name = info['env_name']
     ax.plot(episode_durations)
     ax.plot(running_rewards, color='r')
 
@@ -16,7 +17,7 @@ def plot_episode_durations(ax, info):
     # ax.set_ylabel('Success Rate', fontsize=27)
     # # ax.set_title(f'{img_dir[:-4]} Map | time limit: {time_to_think_limit} sec.')
     # # set_plot_title(ax, f'{img_dir[:-4]} Map | time limit: {time_to_think_limit} sec.', size=11)
-    # set_plot_title(ax, f'{img_dir[:-4]}', size=30)
+    ax.set_title(f'{env_name}', fontweight="bold", size=20)
     # # set_legend(ax, size=27)
     # labelsize = 20
     # ax.xaxis.set_tick_params(labelsize=labelsize)

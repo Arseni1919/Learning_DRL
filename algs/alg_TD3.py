@@ -26,13 +26,15 @@ def main():
     plot_rate = 0.001
     episode_durations: List[int] = []
     running_rewards: List[float] = []
+    # middle_animation = True
+    middle_animation = False
 
     # seeds
     torch.manual_seed(123)
 
     # create env
-    env, env_name = gym.make('InvertedDoublePendulum-v5', reset_noise_scale=0.1, render_mode=render_mode), 'InvertedDoublePendulum-v5'
-    # env, env_name = gym.make('HalfCheetah-v5', ctrl_cost_weight=0.1, render_mode=render_mode), 'HalfCheetah-v5'
+    # env, env_name = gym.make('InvertedDoublePendulum-v5', reset_noise_scale=0.1, render_mode=render_mode), 'InvertedDoublePendulum-v5'
+    env, env_name = gym.make('HalfCheetah-v5', ctrl_cost_weight=0.1, render_mode=render_mode), 'HalfCheetah-v5'
 
     # create NNs
     state_dim = env.observation_space.shape[0]
@@ -68,9 +70,10 @@ def main():
         plot_episode_durations(ax[0], info={
             'episode_durations': episode_durations,
             'running_rewards': running_rewards,
+            'env_name': env_name
         })
         plt.pause(plot_rate)
-        if i_episode % 50 == 0 and i_episode > 0:
+        if middle_animation and i_episode % 50 == 0 and i_episode > 0:
             run_mujoco(env_name, agent, noise_scale)
 
         # stop condition
