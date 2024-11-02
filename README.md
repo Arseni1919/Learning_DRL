@@ -10,15 +10,20 @@ Pseudo-code:
 ### Double DQN
 ### REINFORCE
 ### Actor-Critic
-### DDPG
+### TD3
 
 Pseudo-code:
 ![](pics/DDPG.png)
 
 
+### TD3
+
+Pseudo-code:
+![](pics/td3.png)
+
 ## Credits
 
 - [PyTorch | DQN](https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html)
 - [PyTorch | REINFORCE, Actor-Critic Examples](https://github.com/pytorch/examples/tree/main/reinforcement_learning)
-- [Medium | DDPG](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
+- [Medium | TD3](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
 - []()

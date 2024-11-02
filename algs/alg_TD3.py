@@ -1,4 +1,4 @@
-from alg_DDPG_sup import *
+from alg_TD3_sup import *
 
 
 def main():
@@ -38,7 +38,7 @@ def main():
     state_dim = env.observation_space.shape[0]
     action_dim = env.action_space.shape[0]
     # TD3: state_dim, action_dim, hidden_dim, buffer_size, batch_size, actor_lr, critic_lr, tau, gamma
-    agent = DDPG(state_dim, action_dim, hidden_dim, buffer_size, batch_size, actor_lr, critic_lr, tau, gamma, device)
+    agent = TD3(state_dim, action_dim, hidden_dim, buffer_size, batch_size, actor_lr, critic_lr, tau, gamma, device)
 
     # main loop
     for i_episode in count():
