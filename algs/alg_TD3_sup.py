@@ -124,15 +124,23 @@ class TD3:
         self.critic1.optimizer.zero_grad()
 
         with torch.no_grad():
-            next_actions = self.actor_target(next_states)
-            target_q_values = self.critic1_target(next_states, next_actions)
-            target_q_values = rewards + (1 - dones) * self.gamma * target_q_values
+            next_actions: torch.Tensor = self.actor_target(next_states)
+            # noise = torch.normal(0, 0.2, size=next_actions.shape)
+            # next_actions = torch.clip(next_actions + noise, -1, 1)
+            target1_q_values = self.critic1_target(next_states, next_actions)
+            target2_q_values = self.critic2_target(next_states, next_actions)
+            min_target = torch.min(target1_q_values, target2_q_values)
+            target_q_values = rewards + (1 - dones) * self.gamma * min_target
 
-        current_q_values = self.critic1(states, actions)
-        critic_loss = nn.MSELoss()(current_q_values, target_q_values)
-
-        critic_loss.backward()
+        current1_q_values = self.critic1(states, actions)
+        critic1_loss = nn.MSELoss()(current1_q_values, target_q_values)
+        critic1_loss.backward()
         self.critic1.optimizer.step()
+
+        current2_q_values = self.critic2(states, actions)
+        critic2_loss = nn.MSELoss()(current2_q_values, target_q_values)
+        critic2_loss.backward()
+        self.critic2.optimizer.step()
 
         # UPDATE ACTOR
         self.actor.optimizer.zero_grad()
