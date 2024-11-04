@@ -100,6 +100,12 @@ class DDPG:
         action = np.clip(action + noise, -1, 1)
         return action
 
+    def get_pure_action(self, state, noise=0.0):
+        state: torch.Tensor = torch.tensor(state, dtype=torch.float32).unsqueeze(0).to(self.device)
+        action = self.actor(state).detach().to('cpu').numpy()[0]
+        action = np.clip(action + noise, -1, 1)
+        return action
+
     def store_transition(self, state, action, reward, next_state, done):
         self.memory.add(state, action, reward, next_state, done)
 

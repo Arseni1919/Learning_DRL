@@ -15,7 +15,7 @@ def run_CartPole(select_action, ac_net, device, render_mode: str = 'human', n_ep
                 break
 
 
-def run_mujoco(env_name: str, agent, noise_scale, render_mode: str = 'human', n_episodes: int = 1):
+def run_mujoco(env_name: str, agent, noise_scale: float = 0.1, render_mode: str = 'human', n_episodes: int = 1):
     if env_name == 'HalfCheetah-v5':
         env = gym.make('HalfCheetah-v5', ctrl_cost_weight=0.1, render_mode=render_mode)
     elif env_name == 'InvertedDoublePendulum-v5':
@@ -29,7 +29,7 @@ def run_mujoco(env_name: str, agent, noise_scale, render_mode: str = 'human', n_
 
         for _ in range(100):  # Run for 1000 time steps
             # action = env.action_space.sample()  # random action
-            action = agent.act(obs, noise_scale)
+            action = agent.get_pure_action(obs, noise_scale)
 
             # Step the environment forward and get results
             obs, reward, done, truncated, info = env.step(action)

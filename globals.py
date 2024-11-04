@@ -27,7 +27,7 @@ import torch.distributions
 import torch.optim as optim
 from torch.nn import Sequential
 import torch.nn.functional as F
-from torch.distributions import Categorical
+from torch.distributions import Categorical, MultivariateNormal
 
 
 
