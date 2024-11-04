@@ -9,8 +9,8 @@ def main():
     k_epochs = 40
     eps_clip = 0.2
     gamma = 0.995
-    actor_lr = 5e-4
-    critic_lr = 1e-3
+    actor_lr = 5e-5
+    critic_lr = 1e-5
     action_std_init = 0.6
     action_std_decay_rate = 0.01
     min_action_std = 0.1

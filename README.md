@@ -13,6 +13,10 @@ Pseudo-code:
 
 ### Actor-Critic
 
+### DDPG
+
+Pseudo-code:
+![](pics/DDPG.png)
 
 ### PPO
 
@@ -22,7 +26,7 @@ Pseudo-code:
 ### TD3
 
 Pseudo-code:
-![](pics/DDPG.png)
+![](pics/td3.png)
 
 ## Credits
 
