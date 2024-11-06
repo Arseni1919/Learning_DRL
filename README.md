@@ -48,7 +48,7 @@ Pseudo-code:
 <summary></summary>
 custom_mark10
   digraph G {
-    size ="4,4"
+    size ="10,10"
     main [shape=box]
     main -> parse [weight=8]
     parse -> execute
