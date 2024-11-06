@@ -55,23 +55,7 @@ Pseudo-code:
    execute -> compare;
  }
 '/>
-![Alt text](https://g.gravizo.com/svg?
-  digraph G {
-    size ="4,4";
-    main [shape=box];
-    main -> parse [weight=8];
-    parse -> execute;
-    main -> init [style=dotted];
-    main -> cleanup;
-    execute -> { make_string; printf}
-    init -> make_string;
-    edge [color=red];
-    main -> printf [style=bold,label="100 times"];
-    make_string [label="make a string"];
-    node [shape=box,style=filled,color=".7 .3 1.0"];
-    execute -> compare;
-  }
-)
+![Alt text](https://g.gravizo.com/svg?%20digraph%20G%20{%20size%20=%224,4%22;%20maaaaain%20[shape=box];%20maaaain%20-%3E%20parse%20[weight=8];%20parse%20-%3E%20execute;%20main%20-%3E%20init%20[style=dotted];%20main%20-%3E%20cleanup;%20execute%20-%3E%20{%20make_string;%20printf}%20init%20-%3E%20make_string;%20edge%20[color=red];%20main%20-%3E%20printf%20[style=bold,label=%22100%20times%22];%20make_string%20[label=%22make%20a%20string%22];%20node%20[shape=box,style=filled,color=%22.7%20.3%201.0%22];%20execute%20-%3E%20compare;%20})
 <img src='https://g.gravizo.com/svg?
   digraph G {
     REINFORCE -> Actor-Critic
