@@ -43,43 +43,17 @@ Pseudo-code:
 
 [//]: # (![]&#40;pics/sac3.png&#41;)
 
-<img src='https://g.gravizo.com/svg?
-  digraph G {
-    size ="4,4";
-    REINFORCE -> ActorCritic;
-    ActorCritic -> TRPO;
-    TRPO -> PPO;
-    PPO -> SAC;
-    ActorCritic -> DDPG;
-    DDPG -> TD3;
-    TD3 -> SAC;
-    DQN -> ActorCritic;
-    DQN -> DoubleDQN;
-    DoubleDQN -> TD3;
-    DoubleDQN -> SAC;
-  }
-'/>
-![Alt text](https://g.gravizo.com/svg?
-  digraph G {
-    size ="4,4";
-    REINFORCE -> ActorCritic;
-    ActorCritic -> TRPO;
-    TRPO -> PPO;
-    PPO -> SAC;
-    ActorCritic -> DDPG;
-    DDPG -> TD3;
-    TD3 -> SAC;
-    DQN -> ActorCritic;
-    DQN -> DoubleDQN;
-    DoubleDQN -> TD3;
-    DoubleDQN -> SAC;
-  }
-)
+
+### RL Algorithms Interconnections
+
+![](pics/rl_history.png)
+
 
 
 ## Credits
 
 - [OpenAI | Spinning Up in Deep RL](https://spinningup.openai.com/en/latest/index.html)
+- [graphviz in python](https://graphviz.readthedocs.io/en/stable/index.html)
 - [PyTorch | DQN](https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html)
 - [PyTorch | REINFORCE, Actor-Critic Examples](https://github.com/pytorch/examples/tree/main/reinforcement_learning)
 - [Medium | TD3](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
