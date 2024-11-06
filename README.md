@@ -44,33 +44,38 @@ Pseudo-code:
 [//]: # (![]&#40;pics/sac3.png&#41;)
 
 <img src='https://g.gravizo.com/svg?
- digraph G {
-   main -> parse -> execute;
-   main -> init;
-   main -> cleanup;
-   execute -> make_string;
-   execute -> printf
-   init -> make_string;
-   main -> printf;
-   execute -> compare;
- }
-'/>
-![Alt text](https://g.gravizo.com/svg?%20digraph%20G%20{%20size%20=%224,4%22;%20maaaaain%20[shape=box];%20maaaain%20-%3E%20parse%20[weight=8];%20parse%20-%3E%20execute;%20main%20-%3E%20init%20[style=dotted];%20main%20-%3E%20cleanup;%20execute%20-%3E%20{%20make_string;%20printf}%20init%20-%3E%20make_string;%20edge%20[color=red];%20main%20-%3E%20printf%20[style=bold,label=%22100%20times%22];%20make_string%20[label=%22make%20a%20string%22];%20node%20[shape=box,style=filled,color=%22.7%20.3%201.0%22];%20execute%20-%3E%20compare;%20})
-<img src='https://g.gravizo.com/svg?
   digraph G {
-    REINFORCE -> Actor-Critic
-    Actor-Critic -> TRPO
-    TRPO -> PPO
-    PPO -> SAC
-    Actor-Critic -> DDPG
-    DDPG -> TD3
-    TD3 -> SAC
-    DQN -> Actor-Critic
-    DQN -> Double-DQN
-    Double-DQN -> TD3
-    Double-DQN -> SAC
+    size ="4,4";
+    REINFORCE -> ActorCritic;
+    ActorCritic -> TRPO;
+    TRPO -> PPO;
+    PPO -> SAC;
+    ActorCritic -> DDPG;
+    DDPG -> TD3;
+    TD3 -> SAC;
+    DQN -> ActorCritic;
+    DQN -> DoubleDQN;
+    DoubleDQN -> TD3;
+    DoubleDQN -> SAC;
   }
 '/>
+![Alt text](https://g.gravizo.com/svg?
+  digraph G {
+    size ="4,4";
+    REINFORCE -> ActorCritic;
+    ActorCritic -> TRPO;
+    TRPO -> PPO;
+    PPO -> SAC;
+    ActorCritic -> DDPG;
+    DDPG -> TD3;
+    TD3 -> SAC;
+    DQN -> ActorCritic;
+    DQN -> DoubleDQN;
+    DoubleDQN -> TD3;
+    DoubleDQN -> SAC;
+  }
+)
+
 
 ## Credits
 
