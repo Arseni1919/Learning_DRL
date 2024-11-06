@@ -49,18 +49,17 @@ Pseudo-code:
 custom_mark10
   digraph G {
     size ="10,10"
-    main [shape=box]
-    main -> parse [weight=8]
-    parse -> execute
-    main -> init [style=dotted]
-    main -> cleanup
-    execute -> { make_string; printf}
-    init -> make_string
-    edge [color=red]
-    main -> printf [style=bold,label="100 times"]
-    make_string [label="make a string"]
-    node [shape=box,style=filled,color=".7 .3 1.0"]
-    execute -> compare
+    REINFORCE -> Actor-Critic
+    Actor-Critic -> TRPO
+    TRPO -> PPO
+    PPO -> SAC
+    Actor-Critic -> DDPG
+    DDPG -> TD3
+    TD3 -> SAC
+    DQN -> Actor-Critic
+    DQN -> Double-DQN
+    Double-DQN -> TD3
+    Double-DQN -> SAC
   }
 custom_mark10
 </details>
