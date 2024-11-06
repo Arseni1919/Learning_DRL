@@ -43,12 +43,8 @@ Pseudo-code:
 
 [//]: # (![]&#40;pics/sac3.png&#41;)
 
-![Alt text](https://g.gravizo.com/source/custom_mark10?https%3A%2F%2Fraw.githubusercontent.com%2FTLmaK0%2Fgravizo%2Fmaster%2FREADME.md)
-<details> 
-<summary></summary>
-custom_mark10
+<img src='https://g.gravizo.com/svg?
   digraph G {
-    size ="10,10"
     REINFORCE -> Actor-Critic
     Actor-Critic -> TRPO
     TRPO -> PPO
@@ -61,8 +57,7 @@ custom_mark10
     Double-DQN -> TD3
     Double-DQN -> SAC
   }
-custom_mark10
-</details>
+'/>
 
 ## Credits
 
