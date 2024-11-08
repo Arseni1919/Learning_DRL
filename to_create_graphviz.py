@@ -8,10 +8,10 @@ g.edge('REINFORCE', 'ActorCritic')
 g.edge('DPG', 'DDPG')
 g.edge('DoubleDQN', 'TD3')
 g.edge('DoubleDQN', 'SAC')
-g.edge('ActorCritic', 'TRPO')
-g.edge('TRPO', 'PPO')
-g.edge('PPO', 'SAC')
-g.edge('ActorCritic', 'DDPG')
+g.edge('ActorCritic', 'TRPO', label='on-policy')
+g.edge('TRPO', 'SAC')
+g.edge('SAC', 'SAC')
+g.edge('ActorCritic', 'DDPG', label='off-policy')
 g.edge('DDPG', 'TD3')
 g.edge('TD3', 'SAC')
 
@@ -23,8 +23,8 @@ u.view()
 #     size ="4,4";
 #     REINFORCE -> ActorCritic;
 #     ActorCritic -> TRPO;
-#     TRPO -> PPO;
-#     PPO -> SAC;
+#     TRPO -> SAC;
+#     SAC -> SAC;
 #     ActorCritic -> DDPG;
 #     DDPG -> TD3;
 #     TD3 -> SAC;

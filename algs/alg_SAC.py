@@ -1,21 +1,17 @@
-from alg_PPO_sup import *
+from alg_SAC_sup import *
 
 
 def main():
     # parameters
-    hidden_dim = 400
+    hidden_dim = 512
     max_steps = 100
-    update_time_interval = max_steps * 4
-    k_epochs = 40
-    eps_clip = 0.2
+    actor_lr = 3e-4
+    value_lr = 3e-4
+    soft_q_lr = 3e-4
     gamma = 0.995
-    actor_lr = 5e-5
-    critic_lr = 1e-5
-    action_std_init = 0.6
-    action_std_decay_rate = 0.01
-    min_action_std = 0.1
-    # action_std_decay_freq = int(2.5e5)
-    action_std_decay_freq = int(500)
+    soft_tau = 1e-2
+    buffer_size = 100000
+    batch_size = 128
 
     running_reward = 35
     reward_threshold = 930
@@ -32,7 +28,6 @@ def main():
         plot_rate = 0.001
     episode_durations: List[int] = []
     running_rewards: List[float] = []
-    action_std_list: List[float] = []
 
     # seeds
     torch.manual_seed(123)
@@ -44,17 +39,17 @@ def main():
     # create NNs
     state_dim = env.observation_space.shape[0]
     action_dim = env.action_space.shape[0]
-    agent = PPO(
+    agent = SAC(
         state_dim,
         action_dim,
         hidden_dim,
-        update_time_interval,
-        action_std_init,
         actor_lr,
-        critic_lr,
-        k_epochs,
+        value_lr,
+        soft_q_lr,
         gamma,
-        eps_clip,
+        soft_tau,
+        buffer_size,
+        batch_size,
         device
     )
 
@@ -67,20 +62,14 @@ def main():
         for t in range(max_steps):
             time_step += 1
 
-            action, logprob, state_value = agent.act(state)
+            action = agent.act(state)
             next_state, reward, terminated, truncated, _ = env.step(action)
             done: bool = terminated or truncated
-            agent.store_transition(state, action, logprob, reward, state_value, done)
+            agent.store_transition(state, action, reward, next_state, done)
             ep_reward += reward
 
             # update SAC agent
-            if time_step % update_time_interval == 0:
-                agent.learn()
-
-            # if continuous action space -> decay action std of output action distribution
-            if time_step % action_std_decay_freq == 0:
-            # if time_step % update_time_interval * 10 == 0:
-                agent.decay_action_std(action_std_decay_rate, min_action_std)
+            agent.learn()
 
             state = next_state
             if done:
@@ -93,16 +82,11 @@ def main():
         # print & plot
         episode_durations.append(ep_reward)
         running_rewards.append(running_reward)
-        action_std_list.append(agent.action_std)
         # print(f'\rEpisode: {i_episode}, Last reward: {ep_reward}, Avr. reward: {running_reward}', end='')
         if to_plot:
             plot_episode_durations(ax[0], info={
                 'episode_durations': episode_durations,
                 'running_rewards': running_rewards,
-                'env_name': env_name,
-            })
-            plot_action_std(ax[1], info={
-                'action_std_list': action_std_list,
                 'env_name': env_name,
             })
             plt.pause(plot_rate)
