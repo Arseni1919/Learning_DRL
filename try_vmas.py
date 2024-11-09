@@ -16,11 +16,10 @@ obs = env.reset()
 
 env.render(
     mode="human",  # "rgb_array" returns image, "human" renders in display
-    # agent_index_focus=0,  # If None keep all agents in camera, else focus camera on specific agent
+    agent_index_focus=0,  # If None keep all agents in camera, else focus camera on specific agent
 )
 # Step it with deterministic actions (all agents take their maximum range action)
 for i in range(1000):
     obs, rews, dones, info = env.step(env.get_random_actions())
-    time.sleep(1)
+    time.sleep(0.1)
     print(f'{i}')
-
