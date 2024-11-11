@@ -34,6 +34,7 @@ class ValueNetwork(nn.Module):
 
         self.fc1 = nn.Linear(state_dim, hidden_dim)
         self.fc2 = nn.Linear(hidden_dim, hidden_dim)
+        self.fc2_2 = nn.Linear(hidden_dim, hidden_dim)
         self.fc3 = nn.Linear(hidden_dim, 1)
 
         self.optimizer = optim.Adam(self.parameters(), lr=self.learning_rate)
@@ -41,6 +42,7 @@ class ValueNetwork(nn.Module):
     def forward(self, state):
         x = torch.relu(self.fc1(state))
         x = torch.relu(self.fc2(x))
+        x = torch.relu(self.fc2_2(x))
         x = self.fc3(x)
         return x
 
@@ -53,6 +55,7 @@ class SoftQNetwork(nn.Module):
 
         self.fc1 = nn.Linear(state_dim + action_dim, hidden_dim)
         self.fc2 = nn.Linear(hidden_dim, hidden_dim)
+        self.fc2_2 = nn.Linear(hidden_dim, hidden_dim)
         self.fc3 = nn.Linear(hidden_dim, 1)
 
         self.optimizer = optim.Adam(self.parameters(), lr=self.learning_rate)
@@ -61,6 +64,7 @@ class SoftQNetwork(nn.Module):
         x = torch.cat([state, action], 1)
         x = torch.relu(self.fc1(x))
         x = torch.relu(self.fc2(x))
+        x = torch.relu(self.fc2_2(x))
         x = self.fc3(x)
         return x
 
@@ -77,6 +81,7 @@ class Actor(nn.Module):
         self.learning_rate: float = lr
         self.fc1 = nn.Linear(state_dim, hidden_dim)
         self.fc2 = nn.Linear(hidden_dim, hidden_dim)
+        self.fc2_2 = nn.Linear(hidden_dim, hidden_dim)
         self.mean = nn.Linear(hidden_dim, action_dim)
         self.log_std_linear = nn.Linear(hidden_dim, action_dim)
 
@@ -85,6 +90,7 @@ class Actor(nn.Module):
     def forward(self, x):
         x = torch.relu(self.fc1(x))
         x = torch.relu(self.fc2(x))
+        x = torch.relu(self.fc2_2(x))
         mean = self.mean(x)
         log_std = self.log_std_linear(x)
         log_std = torch.clamp(log_std, self.log_std_min, self.log_std_max)
@@ -98,6 +104,7 @@ class Actor(nn.Module):
         z = normal.sample()
         action = torch.tanh(mean + std * z)
         log_prob = Normal(mean, std).log_prob(mean + std * z) - torch.log(1 - action.pow(2) + epsilon)
+        log_prob = log_prob.sum()
         return action, log_prob, z, mean, log_std
 
     def get_action(self, state):

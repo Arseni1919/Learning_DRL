@@ -1,5 +1,5 @@
-from algs.alg_Double_DQN_sup import *
-from algs.alg_DQN_sup import *
+from algs_RL.alg_Double_DQN_sup import *
+from algs_RL.alg_DQN_sup import *
 
 
 import matplotlib.pyplot as plt

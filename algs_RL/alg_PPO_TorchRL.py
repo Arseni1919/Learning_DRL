@@ -1,4 +1,4 @@
-from algs.alg_PPO_TorchRL_sup import *
+from algs_RL.alg_PPO_TorchRL_sup import *
 
 
 def main():

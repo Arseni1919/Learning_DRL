@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from algs.alg_Actor_Critic_sup import *
+from algs_RL.alg_Actor_Critic_sup import *
 from plot_functions import *
 from global_functions import *
 

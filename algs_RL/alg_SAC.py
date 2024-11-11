@@ -23,6 +23,8 @@ def main():
     # for plots
     to_plot = True
     # to_plot = False
+    to_animate = True
+    # to_animate = False
     if to_plot:
         fig, ax = plt.subplots(1, 2, figsize=(14, 7))
         plot_rate = 0.001
@@ -33,8 +35,9 @@ def main():
     torch.manual_seed(123)
 
     # create env
-    env, env_name = gym.make('InvertedDoublePendulum-v5', reset_noise_scale=0.1, render_mode=render_mode), 'InvertedDoublePendulum-v5'
+    # env, env_name = gym.make('InvertedDoublePendulum-v5', reset_noise_scale=0.1, render_mode=render_mode), 'InvertedDoublePendulum-v5'
     # env, env_name = gym.make('HalfCheetah-v5', ctrl_cost_weight=0.1, render_mode=render_mode), 'HalfCheetah-v5'
+    env, env_name = gym.make("BipedalWalker-v3", hardcore=True, render_mode=render_mode), "BipedalWalker-v3"
 
     # create NNs
     state_dim = env.observation_space.shape[0]
@@ -90,15 +93,18 @@ def main():
                 'env_name': env_name,
             })
             plt.pause(plot_rate)
-            if i_episode % 200 == 0 and i_episode > 0:
-                run_mujoco(env_name, agent)
+        if to_animate:
+            if i_episode % 100 == 0 and i_episode > 0:
+                # run_mujoco(env_name, agent)
+                run_box2d(env_name, agent)
 
         # stop condition
         if running_reward > reward_threshold:
             print(f'\n\nSolved. Avr. reward is above {reward_threshold}.')
             break
 
-    run_mujoco(env_name, agent, n_episodes=10)
+    # run_mujoco(env_name, agent, n_episodes=10)
+    run_box2d(env_name, agent, n_episodes=10)
     plt.show()
 
 

@@ -45,4 +45,30 @@ def run_mujoco(env_name: str, agent, noise_scale: float = 0.1, render_mode: str 
     env.close()
 
 
+def run_box2d(env_name: str, agent, noise_scale: float = 0.1, render_mode: str = 'human', n_episodes: int = 1):
+    if env_name == 'BipedalWalker-v3':
+        env, env_name = gym.make("BipedalWalker-v3", hardcore=True, render_mode=render_mode), "BipedalWalker-v3"
+    else:
+        return
+    # Reset the environment to get the initial state
+    obs, info = env.reset()
+
+    for i_episode in range(n_episodes):
+
+        for _ in range(100):  # Run for 1000 time steps
+            # action = env.action_space.sample()  # random action
+            action = agent.get_pure_action(obs, noise_scale)
+
+            # Step the environment forward and get results
+            obs, reward, done, truncated, info = env.step(action)
+
+            # time.sleep(1)
+
+            # Check if the episode is done
+            if done or truncated:
+                # obs, info = env.reset()
+                break
+
+    # Close the environment properly
+    env.close()
 

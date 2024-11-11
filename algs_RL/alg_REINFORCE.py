@@ -1,4 +1,4 @@
-from algs.alg_REINFORCE_sup import *
+from algs_RL.alg_REINFORCE_sup import *
 from plot_functions import plot_episode_durations
 
 
