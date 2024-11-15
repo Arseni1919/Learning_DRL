@@ -58,6 +58,7 @@ Stand on the shoulders of giants.
 
 - [OpenAI | Spinning Up in Deep RL](https://spinningup.openai.com/en/latest/index.html)
 - [graphviz in python](https://graphviz.readthedocs.io/en/stable/index.html)
+- [OpenAI | Key Papers in Deep RL](https://spinningup.openai.com/en/latest/spinningup/keypapers.html)
 
 ### Algorithms RL
 
