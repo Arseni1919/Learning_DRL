@@ -26,8 +26,12 @@ class FindTarget(MetaMultiAgentEnv):
         # return: obs, info
         # random.seed(seed)
         # np.random.seed(seed)
-        self.target = (random.randint(0, 10), random.randint(0, 10))
-        self.agents_loc = {'agent_0': [random.randint(0, 10), random.randint(0, 10)]}
+        self.target = (random.randint(0, 9), random.randint(0, 9))
+        self.agents_loc = {
+            'agent_0': [random.randint(0, 9), random.randint(0, 9)],
+            # 'agent_1': [random.randint(0, 9), random.randint(0, 9)],
+            # 'agent_3': [random.randint(0, 9), random.randint(0, 9)],
+        }
         info = {'field': self.field, 'target': self.target, 'main_agent': self.agents_loc}
         obs = []
         return obs, info
@@ -43,7 +47,7 @@ class FindTarget(MetaMultiAgentEnv):
     def step(self, actions: dict) -> Tuple[dict, dict, dict, dict, dict]:
         # return: obs, rewards, dones, truncated, info
         for agent_name, action in actions.items():
-            prev_loc = self.agents_loc[agent_name]
+            prev_loc = self.agents_loc[agent_name][:]
             next_loc = self.agents_loc[agent_name]
             action = actions[agent_name]
             # 1 - up, 2 - right, 3 - down, 4 - left, 0 - wait

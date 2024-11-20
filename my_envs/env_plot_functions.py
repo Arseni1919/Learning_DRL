@@ -10,9 +10,12 @@ def render_field(ax: matplotlib.axes.Axes, info):
     env_name = info['env_name']
     target = info['target']
     agents_loc = info['agents_loc']
-    field = info['field']
+    input_field = info['field']
+    # field
+    field = input_field.copy()
     # target
     field[target[0], target[1]] = 2
+    # agents
     for agent_name, loc in agents_loc.items():
         field[loc[0], loc[1]] = 1
     ax.imshow(field, cmap='gray')
