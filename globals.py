@@ -12,6 +12,7 @@ from itertools import combinations, permutations, tee, pairwise, count
 from datetime import datetime
 from typing import *
 from collections import deque, defaultdict, namedtuple
+from abc import ABC
 
 import numpy as np
 import matplotlib
