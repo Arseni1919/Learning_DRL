@@ -1,11 +1,16 @@
 # Learning Deep Reinforcement Learning (DRL) and Multi-Agent DRL
 
+
+## RL Algorithms 
+
 ### DQN Algorithm
 
 Gradient:
-![](pics/dqn2.png)
+
+<img src="pics/dqn2.png" width="700">
+
 Pseudo-code:
-![](pics/dqn1.png)
+<img src="pics/dqn1.png" width="700">
 
 ### Double DQN
 
@@ -14,7 +19,8 @@ Pseudo-code:
 ### Actor-Critic
 
 Pseudo-code:
-![valina_policy_gradient.png](pics/valina_policy_gradient.png)
+<img src="pics/valina_policy_gradient.png" width="700">
+
 
 ### DDPG
 
@@ -48,6 +54,33 @@ Pseudo-code:
 
 ![](pics/rl_history.png)
 
+## MARL Algorithms
+
+### IQL
+
+The idea is simple. Just run independent RL agents in some environments. 
+The main problem: inconsistency of the world that is dependent on actions of other agents. Surprisingly, in some cases IQL works great (e.g. ping-pong env). 
+In [IQL (2015)](https://arxiv.org/abs/1511.08779) paper the authors show how by playing with the reward definitions the behaviour of agents change from cooperative to competitive.
+
+
+### VDN
+### COMA
+### QMix
+### DGN
+### QTRAN
+### IPPO
+### ROMA
+### MADDPG
+### QPlex
+### MAPPO
+### Belief-PPO
+### IDDPG
+### SHAQ
+
+## MARL for MAPF
+
+### PRIMAL
+
 
 
 ## Credits
@@ -70,3 +103,15 @@ Stand on the shoulders of giants.
 - [colab | SAC](https://colab.research.google.com/github/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_colab.ipynb#scrollTo=Z4VJcUT2GlJz) ([github](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO.py))
 - [cleanrl | SAC](https://github.com/vwxyzjn/cleanrl/blob/master/cleanrl/ppo_continuous_action.py) ([github](https://github.com/vwxyzjn/cleanrl/blob/master/cleanrl/sac_continuous_action.py))
 - [Medium | SAC](https://towardsdatascience.com/soft-actor-critic-demystified-b8427df61665) ([github](https://github.com/vaishak2future/sac/blob/master/sac.ipynb))
+
+### Algorithms MARL
+
+- []()
+
+
+
+
+
+
+
+[//]: # (<img src="" width="700">)

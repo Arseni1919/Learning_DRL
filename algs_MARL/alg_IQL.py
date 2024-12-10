@@ -35,7 +35,7 @@ def main():
     torch.manual_seed(123)
 
     # create env
-    map_name = "2s_vs_1sc"
+    map_name = "3m"
     env = StarCraft2Env(map_name=map_name)
 
     # parameters after env init
