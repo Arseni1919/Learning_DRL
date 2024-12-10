@@ -1,4 +1,5 @@
 from globals import *
+from smac.env import StarCraft2Env
 
 
 def run_CartPole(select_action, ac_net, device, render_mode: str = 'human', n_episodes: int = 1):
@@ -70,5 +71,40 @@ def run_box2d(env_name: str, agent, noise_scale: float = 0.1, render_mode: str =
                 break
 
     # Close the environment properly
+    env.close()
+
+
+def run_smac(map_name: str, alg: Any) -> None:
+    env = StarCraft2Env(map_name=map_name)
+    env_info = env.get_env_info()
+
+    n_actions = env_info["n_actions"]
+    n_agents = env_info["n_agents"]
+
+    n_episodes = 10
+
+    for e in range(n_episodes):
+        env.reset()
+        terminated = False
+        episode_reward = 0
+
+        while not terminated:
+            obs = env.get_obs()
+            state = env.get_state()
+            # env.render()  # Uncomment for rendering
+
+            actions = []
+            for agent_id in range(n_agents):
+                avail_actions = env.get_avail_agent_actions(agent_id)
+                avail_actions_ind = np.nonzero(avail_actions)[0]
+                action = alg.get_action(avail_actions, avail_actions_ind, obs[agent_id])
+                actions.append(action)
+
+            reward, terminated, _ = env.step(actions)
+            episode_reward += reward
+
+        print(f"Total reward in episode {e} = {episode_reward}")
+
+    # env.save_replay()
     env.close()
 

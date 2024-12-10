@@ -35,11 +35,6 @@ def main():
     env = StarCraftCapabilityEnvWrapper(
         capability_config=distribution_config,
         map_name="10gen_terran",
-        debug=True,
-        conic_fov=False,
-        obs_own_pos=True,
-        use_unit_ranges=True,
-        min_attack_range=2,
     )
 
     env_info = env.get_env_info()
@@ -68,7 +63,7 @@ def main():
                 actions.append(action)
 
             reward, terminated, _ = env.step(actions)
-            time.sleep(0.15)
+            # time.sleep(0.15)
             episode_reward += reward
         print("Total reward in episode {} = {}".format(e, episode_reward))
 
