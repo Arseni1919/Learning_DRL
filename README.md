@@ -10,6 +10,7 @@ Gradient:
 <img src="pics/dqn2.png" width="700">
 
 Pseudo-code:
+
 <img src="pics/dqn1.png" width="700">
 
 ### Double DQN
@@ -19,6 +20,7 @@ Pseudo-code:
 ### Actor-Critic
 
 Pseudo-code:
+
 <img src="pics/valina_policy_gradient.png" width="700">
 
 
