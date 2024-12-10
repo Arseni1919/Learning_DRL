@@ -27,23 +27,27 @@ Pseudo-code:
 ### DDPG
 
 Pseudo-code:
-![](pics/ddpg_v2.png)
+
+<img src="pics/ddpg_v2.png" width="700">
 
 ### SAC
 
 Pseudo-code:
-![](pics/ppo.png)
+
+<img src="pics/ppo.png" width="700">
 
 ### TD3
 
 Pseudo-code:
-![](pics/td3_v2.png)
+
+<img src="pics/td3_v2.png" width="700">
 
 
 ### SAC
 
 Pseudo-code:
-![](pics/sac_v2.png)
+
+<img src="pics/sac_v2.png" width="700">
 
 [//]: # (![]&#40;pics/sac1.png&#41;)
 
@@ -54,7 +58,7 @@ Pseudo-code:
 
 ### RL Algorithms Interconnections
 
-![](pics/rl_history.png)
+<img src="pics/rl_history.png" width="700">
 
 ## MARL Algorithms
 
