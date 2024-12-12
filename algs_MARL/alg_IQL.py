@@ -28,7 +28,8 @@ def main():
     running_rewards: List[int] = []
     ep_rewards: List[int] = []
     if to_plot:
-        fig, ax = plt.subplots(1, 2, figsize=(14, 7))
+        # fig, ax = plt.subplots(1, 2, figsize=(14, 7))
+        fig, ax = plt.subplots(1, 1, figsize=(7, 7))
         plot_rate = 0.001
 
     #seeds
@@ -78,7 +79,7 @@ def main():
         running_rewards.append(running_reward)
         ep_rewards.append(episode_reward)
         if to_plot:
-            plot_running_rewards(ax[0], info={
+            plot_running_rewards(ax, info={
                 'env_name': map_name, 'running_rewards': running_rewards, 'ep_rewards': ep_rewards
             })
             plt.pause(plot_rate)

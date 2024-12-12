@@ -49,12 +49,6 @@ Pseudo-code:
 
 <img src="pics/sac_v2.png" width="700">
 
-[//]: # (![]&#40;pics/sac1.png&#41;)
-
-[//]: # (![]&#40;pics/sac2.png&#41;)
-
-[//]: # (![]&#40;pics/sac3.png&#41;)
-
 
 ### RL Algorithms Interconnections
 
@@ -65,7 +59,7 @@ Pseudo-code:
 ### IQL
 
 The idea is simple. Just run independent RL agents in some environments. 
-The main problem: inconsistency of the world that is dependent on actions of other agents. Surprisingly, in some cases IQL works great (e.g. ping-pong env). 
+The main problem: nonstationarity of the world that is dependent on actions of other agents. Surprisingly, in some cases IQL works great (e.g. ping-pong env). 
 In [IQL (2015)](https://arxiv.org/abs/1511.08779) paper the authors show how by playing with the reward definitions the behaviour of agents change from cooperative to competitive.
 
 

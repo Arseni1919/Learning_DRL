@@ -23,7 +23,7 @@ class MetaMultiAgentEnv(ABC):
         pass
 
     @abstractmethod
-    def step(self, actions: Dict[str, Any]) -> Tuple[Any, Any, bool, bool, Dict]:
+    def step(self, actions: Dict[str, Any]) -> Tuple[Any, Any, Any, Dict]:
         pass
 
     @abstractmethod
@@ -72,7 +72,7 @@ def create_agents_loc(field: np.ndarray, num_agents: int) -> dict:
     return agents_loc
 
 
-def create_rand_field(width: int, height: int, obstacle_ratio: float = 0.2) -> np.ndarray:
+def create_rand_field(width: int, height: int, obstacle_ratio: float = 0.1) -> np.ndarray:
     field = np.zeros((width, height))
     for i in range(width):
         for j in range(height):

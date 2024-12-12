@@ -1,23 +1,24 @@
 import matplotlib.pyplot as plt
 
-from my_envs.env_functions import *
-from my_envs.env_plot_functions import *
+from my_envs.sup_env_globals import *
+from my_envs.sup_env_plot_functions import *
 
 
 class FindTarget(MetaMultiAgentEnv):
     def __init__(self, to_render: bool = False):
         super().__init__()
-        self.name: str = 'FindTarget'
+        self.name: str = 'EnvTigerDeer'
 
-        self.height: int = 20
-        self.width: int = 20
+        self.height: int = 45
+        self.width: int = 45
         self.field: np.ndarray = create_rand_field(self.width, self.height, 0.05)
         self.target = None
         self.agents_loc: dict = {}
         self.iteration: int = 0
         self.max_iter: int = 500
-        self.num_agents = 1
-        # self.num_agents = 10
+        # self.num_agents = 1
+        self.num_agents = 10
+        # self.num_agents = 100
 
         # rewards
         self.r_step = -0.01
@@ -122,7 +123,7 @@ class FindTarget(MetaMultiAgentEnv):
 
 def main():
     env = FindTarget(to_render=True)
-    # env = FindTarget(to_render=False)
+    # env = EnvTigerDeer(to_render=False)
     observations, info = env.reset(seed=42)
     for i in range(1_000_000):
         # action = policy(observations)  # User-defined policy function
