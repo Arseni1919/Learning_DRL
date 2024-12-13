@@ -24,8 +24,8 @@ class EnvTigerDeer(MetaMultiAgentEnv):
         # self.num_tigers, self.num_deer = 10, 2
 
         # obs
-        self.obs_radius_tiger = 9
-        self.obs_radius_deer = 3
+        self.obs_radius_tiger = 4
+        self.obs_radius_deer = 1
 
         # HP globals
         self.hp_tiger_start = 10
@@ -56,7 +56,7 @@ class EnvTigerDeer(MetaMultiAgentEnv):
         self.n_episode = kwargs['n_episode'] if 'n_episode' in kwargs else 0
         self._create_agents()
         info = {'field': self.field}
-        obs = {}
+        obs = self._build_obs()
         return obs, info
 
     def sample_action(self, agent_name) -> Any:
@@ -90,7 +90,7 @@ class EnvTigerDeer(MetaMultiAgentEnv):
         self._execute_actions(actions)
         self._update_hp_reward_alive_params()
 
-        out_obs = {}
+        out_obs = self._build_obs()
 
         out_rewards = {}
         for d_name, d_params in self.deer_dict.items():
@@ -99,15 +99,17 @@ class EnvTigerDeer(MetaMultiAgentEnv):
             out_rewards[t_name] = t_params['reward']
 
         if self.to_render:
-            render_tiger_deer_field(self.ax[0], info={
+            info = {
                 'env_name': self.name,
                 'tigers_dict': self.tigers_dict,
                 'deer_dict': self.deer_dict,
                 'field': self.field,
                 'iteration': self.iteration,
                 'n_episode': self.n_episode,
-            })
-            # render_agent_view(self.ax[1], info={'agent_obs': out_obs['agent_0']})
+                'out_obs': out_obs,
+            }
+            render_tiger_deer_field(self.ax[0], info)
+            # render_td_agent_view(self.ax[1], info)
             plt.pause(self.plot_rate)
 
         out_dones = {}
@@ -143,7 +145,8 @@ class EnvTigerDeer(MetaMultiAgentEnv):
                 'loc': [target_x, target_y],
                 'attack': [target_x, target_y],
                 'hp': self.hp_tiger_start,
-                'reward': 0
+                'reward': 0,
+                'obs_radius': self.obs_radius_tiger,
             }
             field[target_x, target_y] = 1
             self.agents_dict[tiger_name] = self.tigers_dict[tiger_name]
@@ -156,7 +159,8 @@ class EnvTigerDeer(MetaMultiAgentEnv):
                 'alive': True,
                 'loc': [target_x, target_y],
                 'hp': self.hp_deer_start,
-                'reward': 0
+                'reward': 0,
+                'obs_radius': self.obs_radius_deer,
             }
             field[target_x, target_y] = 1
             self.agents_dict[deer_name] = self.deer_dict[deer_name]
@@ -292,11 +296,22 @@ class EnvTigerDeer(MetaMultiAgentEnv):
         - other_team_presence
         - other_team_hp
         """
+        t_team_presence, d_team_presence = np.zeros(self.field.shape), np.zeros(self.field.shape)
+        t_team_hp, d_team_hp = np.zeros(self.field.shape), np.zeros(self.field.shape)
+        for i_name, i_params in self.agents_dict.items():
+            if i_params['type'] == 'tiger':
+                t_team_presence[i_params['loc'][0], i_params['loc'][1]] = 1
+                t_team_hp[i_params['loc'][0], i_params['loc'][1]] = i_params['hp']
+            elif i_params['type'] == 'deer':
+                d_team_presence[i_params['loc'][0], i_params['loc'][1]] = 1
+                d_team_hp[i_params['loc'][0], i_params['loc'][1]] = i_params['hp']
+            else:
+                raise RuntimeError('nope')
         obs = {}
         for i_name, i_params in self.agents_dict.items():
             radius = self.obs_radius_tiger if i_params['type'] == 'tiger' else self.obs_radius_deer
             curr_loc = i_params['loc']
-            i_obs: np.ndarray = np.zeros((radius, radius, 5))
+            i_obs: np.ndarray = np.zeros((2*radius + 1, 2*radius + 1, 5))
             for x_offset in range(-radius, radius+1):
                 for y_offset in range(-radius, radius+1):
                     i_obs_x = x_offset + radius
@@ -307,18 +322,24 @@ class EnvTigerDeer(MetaMultiAgentEnv):
                         continue
                     #  - obstacle/off the map
                     i_obs[i_obs_x, i_obs_y, 0] = self.field[i_x, i_y]
-
-                    #  - my_team_presence
-                    pass
-
-                    #  - my_team_hp
-                    pass
-
-                    #  - other_team_presence
-                    pass
-
-                    #  - other_team_hp
-                    pass
+                    if i_params['type'] == 'tiger':
+                        #  - my_team_presence
+                        i_obs[i_obs_x, i_obs_y, 1] = t_team_presence[i_x, i_y]
+                        #  - my_team_hp
+                        i_obs[i_obs_x, i_obs_y, 2] = t_team_hp[i_x, i_y]
+                        #  - other_team_presence
+                        i_obs[i_obs_x, i_obs_y, 3] = d_team_presence[i_x, i_y]
+                        #  - other_team_hp
+                        i_obs[i_obs_x, i_obs_y, 4] = d_team_hp[i_x, i_y]
+                    else:
+                        #  - my_team_presence
+                        i_obs[i_obs_x, i_obs_y, 1] = d_team_presence[i_x, i_y]
+                        #  - my_team_hp
+                        i_obs[i_obs_x, i_obs_y, 2] = d_team_hp[i_x, i_y]
+                        #  - other_team_presence
+                        i_obs[i_obs_x, i_obs_y, 3] = t_team_presence[i_x, i_y]
+                        #  - other_team_hp
+                        i_obs[i_obs_x, i_obs_y, 4] = t_team_hp[i_x, i_y]
 
             obs[i_name] = i_obs
         return obs
