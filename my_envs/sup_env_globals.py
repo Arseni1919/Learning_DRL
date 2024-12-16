@@ -1,13 +1,13 @@
-from abc import abstractmethod
-
-import numpy as np
-
 from globals import *
 
 
 class MetaMultiAgentEnv(ABC):
 
     def __init__(self):
+        pass
+
+    @abstractmethod
+    def get_env_info(self):
         pass
 
     @abstractmethod

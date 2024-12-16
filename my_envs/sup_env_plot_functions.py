@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 
 from globals import *
+from collections import OrderedDict
 
 
 def render_field(ax: matplotlib.axes.Axes, info):
@@ -115,6 +116,8 @@ def render_tiger_deer_field(ax: matplotlib.axes.Axes, info):
     n_episode = info['n_episode']
     width = input_field.shape[0]
     height = input_field.shape[1]
+    alive_deer_dict = {d_name: d_params for d_name, d_params in deer_dict.items() if d_params['alive']}
+    alive_tiger_dict = OrderedDict((t_name, t_params) for t_name, t_params in tigers_dict.items() if t_params['alive'])
 
     # field
     field_x, field_y = [], []
@@ -128,9 +131,7 @@ def render_tiger_deer_field(ax: matplotlib.axes.Axes, info):
     # tigers: moves and attacks
     tigers_x, tigers_y = [], []
     attack_lines = []
-    for t_name, t_params in tigers_dict.items():
-        if not t_params['alive']:
-            continue
+    for t_name, t_params in alive_tiger_dict.items():
         t_x, t_y = t_params['loc'][0], t_params['loc'][1]
         t_hp = f"{t_params['hp']: .2f}"
         tigers_x.append(t_x)
@@ -143,16 +144,13 @@ def render_tiger_deer_field(ax: matplotlib.axes.Axes, info):
 
     # deer
     deer_x, deer_y = [], []
-    for d_name, d_params in deer_dict.items():
-        if not d_params['alive']:
-            continue
+    for d_name, d_params in alive_deer_dict.items():
         d_x, d_y = d_params['loc'][0], d_params['loc'][1]
         d_hp = f"{d_params['hp']: .2f}"
         deer_x.append(d_x)
         deer_y.append(d_y)
         ax.text(d_x, d_y + 1, d_hp, color='blue', fontsize=8, ha='center', va='center')
     ax.plot(deer_x, deer_y, 'o', c='blue', markersize=markersize)
-
 
     main_agent_params = tigers_dict['tiger_0']
     if main_agent_params['alive']:

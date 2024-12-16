@@ -64,6 +64,20 @@ In [IQL (2015)](https://arxiv.org/abs/1511.08779) paper the authors show how by 
 
 
 ### VDN
+
+Implicitly, the value decomposition network aims to learn an optimal linear value decomposition from the team reward signal, 
+by back-propagating the total Q gradient through deep neural networks representing the individual component value functions.
+
+This additive value decomposition is speciﬁcally motivated by avoiding the spurious reward signals that emerge in purely independent learners.
+The implicit value function learned by each agent depends only on local observations, and so is more easily learned.
+
+<img src="pics/vdn_q_function.png" width="700">
+
+Basic architecture:
+
+<img src="pics/vdn_basic_arc.png" width="700">
+
+
 ### COMA
 ### QMix
 ### DGN

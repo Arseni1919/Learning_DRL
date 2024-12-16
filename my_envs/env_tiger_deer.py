@@ -1,14 +1,20 @@
 import matplotlib.pyplot as plt
+import torch
 
 from my_envs.sup_env_globals import *
 from my_envs.sup_env_plot_functions import *
 
 
 class EnvTigerDeer(MetaMultiAgentEnv):
-    def __init__(self, to_render: bool = False):
+    def __init__(
+            self,
+            to_render: bool = False,
+            num_tigers: int = 101, num_deer: int = 20,
+    ):
         super().__init__()
         self.name: str = 'EnvTigerDeer'
 
+        self.num_tigers, self.num_deer = num_tigers, num_deer
         self.height: int = 45
         self.width: int = 45
         self.field: np.ndarray = create_rand_field(self.width, self.height, 0.01)
@@ -18,14 +24,18 @@ class EnvTigerDeer(MetaMultiAgentEnv):
         self.iteration: int = 0
         self.n_episode: int = 0
         self.max_iter: int = 500
+        self.n_actions_tiger: int = 9
+        self.n_actions_deer: int = 5
 
-        # self.num_tigers, self.num_deer = 202, 40
-        self.num_tigers, self.num_deer = 101, 20
-        # self.num_tigers, self.num_deer = 10, 2
+        # names
+        self.tigers_names = [f'tiger_{num}' for num in range(self.num_tigers)]
+        self.deer_names = [f'deer_{num}' for num in range(self.num_deer)]
 
         # obs
         self.obs_radius_tiger = 4
         self.obs_radius_deer = 1
+        self.obs_shape_tiger = (2*self.obs_radius_tiger + 1, 2*self.obs_radius_tiger + 1, 5)
+        self.obs_shape_deer = (2*self.obs_radius_deer + 1, 2*self.obs_radius_deer + 1, 5)
 
         # HP globals
         self.hp_tiger_start = 10
@@ -45,13 +55,24 @@ class EnvTigerDeer(MetaMultiAgentEnv):
         self.to_render: bool = to_render
         self.fig, self.ax, self.plot_rate = None, None, None
         if self.to_render:
-            self.fig, self.ax = plt.subplots(1, 2, figsize=(14, 7))
+            # self.fig, self.ax = plt.subplots(1, 2, figsize=(14, 7))
+            self.fig, self.ax = plt.subplots(1, 1, figsize=(7, 7))
             self.plot_rate = 0.001
 
-    def reset(self, seed: int = 123, **kwargs) -> Tuple[Any, Dict]:
+    def get_env_info(self):
+        return {
+            'n_actions_tiger': self.n_actions_tiger, 'n_actions_deer': self.n_actions_deer,
+            'num_tigers': self.num_tigers, 'num_deer': self.num_deer,
+            'obs_shape_tiger': (2*self.obs_radius_tiger + 1, 2*self.obs_radius_tiger + 1, 5),
+            'obs_shape_deer': (2*self.obs_radius_deer + 1, 2*self.obs_radius_deer + 1, 5),
+        }
+
+    def reset(self, seed: int | None = None, **kwargs) -> Tuple[Any, Dict]:
         # return: obs, info
-        # random.seed(seed)
-        # np.random.seed(seed)
+        if seed is not None:
+            random.seed(seed)
+            np.random.seed(seed)
+            torch.manual_seed(seed)
         self.iteration = 0
         self.n_episode = kwargs['n_episode'] if 'n_episode' in kwargs else 0
         self._create_agents()
@@ -60,12 +81,15 @@ class EnvTigerDeer(MetaMultiAgentEnv):
         return obs, info
 
     def sample_action(self, agent_name) -> Any:
+        """
+        In random.randint(a, b) - it includes b.
+        """
         if agent_name in self.tigers_dict:
             # 0 - do nothing, 1-4 - move, 5-8 - attack
-            return random.randint(0, 9)
+            return random.randint(0, 8)
         if agent_name in self.deer_dict:
             # 0 - do nothing, 1-4 - move
-            return random.randint(0, 5)
+            return random.randint(0, 4)
         raise RuntimeError('nope')
 
     def sample_actions(self) -> Any:
@@ -82,7 +106,7 @@ class EnvTigerDeer(MetaMultiAgentEnv):
             actions[d_name] = action
         return actions
 
-    def step(self, actions: dict) -> Tuple[dict, dict, dict, dict]:
+    def step(self, actions: dict, **kwargs) -> Tuple[dict, dict, dict, dict]:
         # return: obs, rewards, dones, info
         self.iteration += 1
 
@@ -98,6 +122,25 @@ class EnvTigerDeer(MetaMultiAgentEnv):
         for t_name, t_params in self.tigers_dict.items():
             out_rewards[t_name] = t_params['reward']
 
+        out_dones = {}
+        t_counter = 0
+        d_counter = 0
+        for d_name, d_params in self.deer_dict.items():
+            out_dones[d_name] = not d_params['alive']
+            d_counter += d_params['alive']
+        for t_name, t_params in self.tigers_dict.items():
+            out_dones[t_name] = not t_params['alive']
+            t_counter += t_params['alive']
+        finished = t_counter < 2 or d_counter == 0
+        if self.iteration >= self.max_iter:
+            out_dones = {k: True for k in out_dones.keys()}
+            finished = True
+
+        out_info = {
+            'iteration': self.iteration, 'tigers_dict': self.tigers_dict, 'deer_dict': self.deer_dict,
+            'finished': finished,
+        }
+
         if self.to_render:
             info = {
                 'env_name': self.name,
@@ -108,25 +151,10 @@ class EnvTigerDeer(MetaMultiAgentEnv):
                 'n_episode': self.n_episode,
                 'out_obs': out_obs,
             }
-            render_tiger_deer_field(self.ax[0], info)
+            render_tiger_deer_field(self.ax, info)
             # render_td_agent_view(self.ax[1], info)
             plt.pause(self.plot_rate)
 
-        out_dones = {}
-        t_counter = 0
-        d_counter = 0
-        for d_name, d_params in self.deer_dict.items():
-            out_dones[d_name] = d_params['alive']
-            d_counter += d_params['alive']
-        for t_name, t_params in self.tigers_dict.items():
-            out_dones[t_name] = t_params['alive']
-            t_counter += t_params['alive']
-        finished = t_counter < 2 or d_counter == 0
-
-        out_info = {
-            'iteration': self.iteration, 'tigers_dict': self.tigers_dict, 'deer_dict': self.deer_dict,
-            'finished': finished,
-        }
         # return: obs, rewards, dones, truncated, info
         return out_obs, out_rewards, out_dones, out_info
 
@@ -134,9 +162,11 @@ class EnvTigerDeer(MetaMultiAgentEnv):
         plt.close()
 
     def _create_agents(self):
+        self.agents_dict = OrderedDict()
+        self.tigers_dict = OrderedDict()
+        self.deer_dict = OrderedDict()
         field = self.field.copy()
-        for i in range(self.num_tigers):
-            tiger_name = f'tiger_{i}'
+        for i, tiger_name in enumerate(self.tigers_names):
             [target_x, target_y] = choose_unoccupied_loc(field)
             self.tigers_dict[tiger_name] = {
                 'num': i,
@@ -150,8 +180,7 @@ class EnvTigerDeer(MetaMultiAgentEnv):
             }
             field[target_x, target_y] = 1
             self.agents_dict[tiger_name] = self.tigers_dict[tiger_name]
-        for i in range(self.num_deer):
-            deer_name = f'deer_{i}'
+        for i, deer_name in enumerate(self.deer_names):
             [target_x, target_y] = choose_unoccupied_loc(field)
             self.deer_dict[deer_name] = {
                 'num': i,
@@ -164,20 +193,19 @@ class EnvTigerDeer(MetaMultiAgentEnv):
             }
             field[target_x, target_y] = 1
             self.agents_dict[deer_name] = self.deer_dict[deer_name]
-        self.agents_dict = {**self.tigers_dict, **self.deer_dict}
 
     def _execute_actions(self, actions: dict) -> None:
         # execute actions
         forbidden_locs = [params['loc'][:] for params in self.tigers_dict.values() if params['alive']]
         forbidden_locs.extend([params['loc'][:] for params in self.deer_dict.values() if params['alive']])
+        alive_deer_dict = {d_name: d_params for d_name, d_params in self.deer_dict.items() if d_params['alive']}
+        alive_tiger_dict = {t_name: t_params for t_name, t_params in self.tigers_dict.items() if t_params['alive']}
 
-        for t_name, t_params in self.tigers_dict.items():
-            if not t_params['alive']:
-                continue
+        for t_name, t_params in alive_tiger_dict.items():
             t_loc = t_params['loc']
             # 0 - do nothing, 1-4 - move, 5-8 - attack
             prev_loc = t_loc[:]
-            action = actions[t_name]
+            action = int(actions[t_name]) if t_name in actions else self.sample_action(t_name)
             if action == 0:
                 t_params['attack'] = t_loc[:]
                 continue
@@ -209,13 +237,11 @@ class EnvTigerDeer(MetaMultiAgentEnv):
             if action == 8:
                 t_params['attack'] = [t_loc[0] - 1, t_loc[1]]
 
-        for d_name, d_params in self.deer_dict.items():
-            if not d_params['alive']:
-                continue
+        for d_name, d_params in alive_deer_dict.items():
             # 0 - do nothing, 1-4 - move
             d_loc = d_params['loc']
             prev_loc = d_loc[:]
-            action = actions[d_name]
+            action = int(actions[d_name]) if d_name in actions else self.sample_action(d_name)
             if action == 0:
                 continue
             if action == 1:
@@ -238,21 +264,32 @@ class EnvTigerDeer(MetaMultiAgentEnv):
 
     def _update_hp_reward_alive_params(self):
         processed_names = []
+        alive_deer_dict = {d_name: d_params for d_name, d_params in self.deer_dict.items() if d_params['alive']}
+        alive_tiger_dict = {t_name: t_params for t_name, t_params in self.tigers_dict.items() if t_params['alive']}
+        # zero all rewards
         for d_name, d_params in self.deer_dict.items():
             d_params['reward'] = 0
         for t_name, t_params in self.tigers_dict.items():
             t_params['reward'] = 0
+        # build a map of current deer locations
         deer_field = np.ones(self.field.shape) * -1
-        for d_name, d_params in self.deer_dict.items():
-            if not d_params['alive']:
-                continue
+        for d_name, d_params in alive_deer_dict.items():
             deer_field[d_params['loc'][0], d_params['loc'][1]] = d_params['num']
-        for t_name_1, t_name_2 in combinations(self.tigers_dict.keys(), 2):
-            if not self.tigers_dict[t_name_1]['alive'] or not self.tigers_dict[t_name_1]['alive']:
+        # single-agent attack reward for a tiger
+        for t_name, t_params in alive_tiger_dict.items():
+            t_attack = self.tigers_dict[t_name]['attack']
+            if t_attack[0] < 0 or t_attack[0] >= self.width or t_attack[1] < 0 or t_attack[1] >= self.height:
                 continue
+            if deer_field[t_attack[0], t_attack[1]] == -1:
+                continue
+            t_params['reward'] = self.r_attack / 2
+        # double-agent attack reward for a tiger
+        for t_name_1, t_name_2 in combinations(alive_tiger_dict.keys(), 2):
             attack_1 = self.tigers_dict[t_name_1]['attack']
             attack_2 = self.tigers_dict[t_name_2]['attack']
             if attack_1 != attack_2:
+                continue
+            if attack_1[0] < 0 or attack_1[0] >= self.width or attack_1[1] < 0 or attack_1[1] >= self.height:
                 continue
             if deer_field[attack_1[0], attack_1[1]] == -1:
                 continue
@@ -266,22 +303,20 @@ class EnvTigerDeer(MetaMultiAgentEnv):
             processed_names.append(t_name_1)
             processed_names.append(t_name_2)
             processed_names.append(deer_name)
-        for d_name, d_params in self.deer_dict.items():
-            if not d_params['alive']:
-                continue
+        for d_name, d_params in alive_deer_dict.items():
             if d_name in processed_names:
                 continue
             d_params['hp'] += self.hp_deer_step
             if d_params['hp'] <= 0:
                 d_params['alive'] = False
                 d_params['reward'] = self.r_dying
-        for t_name, t_params in self.tigers_dict.items():
-            if not t_params['alive']:
-                continue
+        for t_name, t_params in alive_tiger_dict.items():
             if t_name in processed_names:
                 continue
             t_params['hp'] += self.hp_tiger_step
-            t_params['alive'] = t_params['hp'] > 0
+            if t_params['hp'] <= 0:
+                t_params['alive'] = False
+                t_params['reward'] = self.r_dying
 
     def _build_obs(self) -> Dict[str, np.ndarray]:
         """
@@ -296,9 +331,13 @@ class EnvTigerDeer(MetaMultiAgentEnv):
         - other_team_presence
         - other_team_hp
         """
+        # alive_deer_dict = {d_name: d_params for d_name, d_params in self.deer_dict.items() if d_params['alive']}
+        # alive_tiger_dict = {t_name: t_params for t_name, t_params in self.tigers_dict.items() if t_params['alive']}
+        alive_agents_dict = {a_name: a_params for a_name, a_params in self.agents_dict.items() if a_params['alive']}
+        # alive_agents_dict = {**alive_deer_dict, **alive_tiger_dict}
         t_team_presence, d_team_presence = np.zeros(self.field.shape), np.zeros(self.field.shape)
         t_team_hp, d_team_hp = np.zeros(self.field.shape), np.zeros(self.field.shape)
-        for i_name, i_params in self.agents_dict.items():
+        for i_name, i_params in alive_agents_dict.items():
             if i_params['type'] == 'tiger':
                 t_team_presence[i_params['loc'][0], i_params['loc'][1]] = 1
                 t_team_hp[i_params['loc'][0], i_params['loc'][1]] = i_params['hp']
@@ -308,7 +347,7 @@ class EnvTigerDeer(MetaMultiAgentEnv):
             else:
                 raise RuntimeError('nope')
         obs = {}
-        for i_name, i_params in self.agents_dict.items():
+        for i_name, i_params in alive_agents_dict.items():
             radius = self.obs_radius_tiger if i_params['type'] == 'tiger' else self.obs_radius_deer
             curr_loc = i_params['loc']
             i_obs: np.ndarray = np.zeros((2*radius + 1, 2*radius + 1, 5))
@@ -360,7 +399,7 @@ def main():
         if info['finished']:
             eps_counter += 1
             observations, info = env.reset(n_episode=eps_counter)
-        print(f'\r{eps_counter=}, {i=}', end='')
+        print(f'\r{eps_counter=}, {env.iteration=}, {i=}', end='')
 
     env.close()
 

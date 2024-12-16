@@ -2,6 +2,22 @@ from globals import *
 from smac.env import StarCraft2Env
 
 
+def use_profiler(save_dir):
+    def decorator(func):
+        def inner1(*args, **kwargs):
+            profiler = cProfile.Profile()
+            profiler.enable()
+            # getting the returned value
+            returned_value = func(*args, **kwargs)
+            profiler.disable()
+            stats = pstats.Stats(profiler).sort_stats('cumtime')
+            stats.dump_stats(save_dir)
+            # returning the value to the original frame
+            return returned_value
+        return inner1
+    return decorator
+
+
 def run_CartPole(select_action, ac_net, device, render_mode: str = 'human', n_episodes: int = 1):
     env = gym.make("CartPole-v1", render_mode=render_mode)
 
