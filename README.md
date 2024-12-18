@@ -78,9 +78,44 @@ Basic architecture:
 <img src="pics/vdn_basic_arc.png" width="700">
 
 
-### COMA
 ### QMix
+
+QMIX is a value-based method that can train decentralised policies in a centralised end-to-end fashion. 
+QMIX employs a network that estimates joint action-values as a complex non-linear combination of per-agent values that condition only on local observations. 
+THe authors structurally enforce that the joint-action value is monotonic in the per-agent values, which allows tractable maximisation of the joint action-value in off-policy learning, and guarantees consistency between the centralised and decentralised policies.
+
+Basically, QMix is like VDN but is not constrained to linear dependencies between agents' Q values.
+QMix also makes use of external state of the environment.
+
+The graphical representation of QMix NNs:
+
+<img src="pics/qmix.png" width="700">
+
+
+### COMA
+
+Counterfactual Multi-Agent (COMA) is an actor-critic algorithm with a centralised critic.
+Three main ideas underly COMA:
+1) centralisation of the critic, 
+2) use of a counterfactual baseline, and 
+3) use of a critic representation that allows efﬁcient evaluation of the baseline.
+
+COMA also uses external state of the environment in the learning stage.
+
+The architecture:
+
+<img src="pics/coma.png" width="700">
+
 ### DGN
+
+The overview of DGN:
+
+<img src="pics/dgn.png" width="700">
+
+<img src="pics/dgn2.png" width="700">
+
+Code: [https://github.com/PKU-RL/DGN](https://github.com/PKU-RL/DGN)
+
 ### QTRAN
 ### IPPO
 ### ROMA
@@ -120,7 +155,7 @@ Stand on the shoulders of giants.
 
 ### Algorithms MARL
 
-- []()
+- [github | DGN](https://github.com/PKU-RL/DGN)
 
 
 

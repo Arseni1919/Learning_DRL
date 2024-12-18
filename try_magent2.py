@@ -4,8 +4,34 @@ from magent2.environments import battle_v4, battlefield_v5, combined_arms_v6
 from magent2.environments import tiger_deer_v3, tiger_deer_v4, gather_v5
 from pettingzoo.utils import random_demo
 
+
+
+
+# from magent2.environments.adversarial_pursuit import parallel_env
+# from magent2.environments.battle import parallel_env
+# from magent2.environments.battlefield import parallel_env
+# from magent2.environments.combined_arms import parallel_env
+# from magent2.environments.gather import parallel_env, raw_env
+from magent2.environments.tiger_deer import parallel_env
+
 render_mode='human'
 # render_mode=None
+
+env = parallel_env(render_mode=render_mode, max_cycles=200)
+observations, infos = env.reset()
+
+i_step = 0
+while env.agents:
+    # this is where you would insert your policy
+    actions = {agent: env.action_space(agent).sample() for agent in env.agents}
+
+    observations, rewards, terminations, truncations, infos = env.step(actions)
+
+    i_step += 1
+    print(f'{i_step}')
+    # time.sleep(0.1)
+env.close()
+
 
 # env = battlefield_v5.env(
 #     map_size=50, minimap_mode=False, step_reward=-0.005, dead_penalty=-0.1, attack_penalty=-0.1,
@@ -30,20 +56,23 @@ render_mode='human'
 
 # random_demo(env, render=True, episodes=10)
 
-env = tiger_deer_v4.env(
-    map_size=105, minimap_mode=False, tiger_step_recover=-0.1, deer_attacked=-0.1, max_cycles=500, extra_features=False,
-    render_mode=render_mode
-)
+# env = tiger_deer_v4.env(
+#     map_size=105, minimap_mode=False, tiger_step_recover=-0.1, deer_attacked=-0.1, max_cycles=500, extra_features=False,
+#     render_mode=render_mode
+# )
+#
+# env.reset()
+# done_dict = {a_name: False for a_name in env.agents}
+#
+# for agent in env.agent_iter():
+#     observation, reward, termination, truncation, info = env.last()
+#     if termination:
+#         env.step(None)
+#         done_dict[agent] = True
+#         continue
+#     action = env.action_space(agent).sample()
+#     env.step(action)
+# env.close()
 
-env.reset()
-done_dict = {a_name: False for a_name in env.agents}
 
-for agent in env.agent_iter():
-    observation, reward, termination, truncation, info = env.last()
-    if termination:
-        env.step(None)
-        done_dict[agent] = True
-        continue
-    action = env.action_space(agent).sample()
-    env.step(action)
-env.close()
+# env = basketball_pong_v3.parallel_env(render_mode="human")

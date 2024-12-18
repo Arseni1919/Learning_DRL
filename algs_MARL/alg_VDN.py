@@ -53,8 +53,8 @@ class AlgVDN(AlgMetaClass):
             self.target_nn_dict[agent_name].load_state_dict( self.policy_nn_dict[agent_name].state_dict())
             nn_params_list.append(list(self.policy_nn_dict[agent_name].parameters()))
         united_nn_params_list = list(itertools.chain.from_iterable(nn_params_list))
-        self.optimizer: optim.AdamW = optim.AdamW(united_nn_params_list, lr=params['LR'], amsgrad=True)
-        self.memory = ReplayMemory()
+        self.optimizer: optim.AdamW = optim.AdamW(united_nn_params_list, lr=self.params['LR'], amsgrad=True)
+        self.memory = ReplayMemory(capacity=self.params['capacity'])
 
     def select_actions(self, obs_dict: Dict[str, torch.Tensor], **kwargs) -> Dict[str, torch.Tensor]:
         env = kwargs['env']
@@ -102,8 +102,9 @@ class AlgVDN(AlgMetaClass):
         transitions = self.memory.sample(BATCH_SIZE)
         batch = Transitions(*zip(*transitions))
         obs, actions, next_obs, rewards, terminated = batch
-        tot_q_value = 0
-        tot_q_value_expected = 0
+        self.optimizer.zero_grad()
+        tot_q_values = torch.tensor([])
+        tot_q_values_expected = torch.tensor([])
         for agent_name in self.agents_names:
             batch_obs, action_batch, batch_next_obs, reward_batch, batch_terminated = [], [], [], [], []
             for i in range(BATCH_SIZE):
@@ -120,25 +121,35 @@ class AlgVDN(AlgMetaClass):
             reward_batch = torch.stack(reward_batch)
             batch_terminated = torch.stack(batch_terminated)
             q_values = self.policy_nn_dict[agent_name](batch_obs).gather(1, action_batch)  # Get Q-values for all actions
-            tot_q_value += q_values
+            # tot_q_values += q_values
+            tot_q_values = torch.cat((tot_q_values, q_values))
             with torch.no_grad():
                 next_q_values = self.target_nn_dict[agent_name](batch_next_obs).max(1).values * (1 - batch_terminated.float())
-                tot_q_value_expected += reward_batch[0] + GAMMA * next_q_values
+                q_value_expected = reward_batch[0] + GAMMA * next_q_values
+
+                tot_q_values_expected = torch.cat((tot_q_values_expected, q_value_expected))
+            criterion = nn.MSELoss()
+            loss: nn.Module = criterion(q_values, q_value_expected)
+            loss.backward()
+
 
         # criterion = nn.SmoothL1Loss()
-        tot_q_value_expected = tot_q_value_expected.unsqueeze(1)
-        criterion = nn.MSELoss()
-        loss: nn.Module = criterion(tot_q_value, tot_q_value_expected)
-        self.optimizer.zero_grad()
-        loss.backward()
+        # tot_q_values_expected = tot_q_values_expected.unsqueeze(1)
+        # criterion = nn.MSELoss()
+        # loss: nn.Module = criterion(tot_q_values, tot_q_values_expected)
+        # self.optimizer.zero_grad()
+        # loss.backward()
         self.optimizer.step()
+        self.target_soft_copy()
         # nn.utils.clip_grad_value_(policy_net.parameters(), 100)
 
 
 @use_profiler(save_dir='../stats/alg_vdn.pstat')
 def main():
     # parameters
-    n_episodes = 1_000_000
+    # n_episodes = 1_000_000
+    n_episodes = 10000
+    # n_episodes = 300
     # n_episodes = 100
     # n_episodes = 3
     params = {
@@ -149,6 +160,7 @@ def main():
         'EPS_DECAY': 10000,
         'TAU': 0.005,  # update rate of the target network
         'LR': 1e-5,  # learning rate of the AdamW optimizer
+        'capacity': 10000,
         # device = torch.device(
         #     "cuda" if torch.cuda.is_available() else
         #     "mps" if torch.backends.mps.is_available() else
@@ -165,8 +177,8 @@ def main():
 
 
     # for plots
-    to_plot = True
-    # to_plot = False
+    # to_plot = True
+    to_plot = False
     running_reward = 0
     running_rewards: List[int] = []
     ep_rewards: List[int] = []
@@ -190,8 +202,9 @@ def main():
     # num_tigers, num_deer = 202, 40
     # num_tigers, num_deer = 101, 20
     # num_tigers, num_deer = 51, 10
-    num_tigers, num_deer = 20, 10
-    # num_tigers, num_deer = 10, 2
+    # num_tigers, num_deer = 20, 10
+    # num_tigers, num_deer = 10, 4
+    num_tigers, num_deer = 2, 20
 
     # env = EnvTigerDeer(num_tigers=num_tigers, num_deer=num_deer, to_render=True)
     env: EnvTigerDeer = EnvTigerDeer(num_tigers=num_tigers, num_deer=num_deer, to_render=False)
@@ -232,7 +245,7 @@ def main():
         running_reward = 0.01 * episode_reward + (1 - 0.01) * running_reward
         running_rewards.append(running_reward)
         ep_rewards.append(episode_reward)
-        print(f'\n{episode_reward=}', end='\n')
+        print(f'\n{episode_reward=} | {running_reward=:.2f}', end='\n')
         if to_plot:
             plot_running_rewards(ax, info={
                 'env_name': env.name, 'running_rewards': running_rewards, 'ep_rewards': ep_rewards
