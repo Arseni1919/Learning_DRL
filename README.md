@@ -131,6 +131,42 @@ Code: [https://github.com/PKU-RL/DGN](https://github.com/PKU-RL/DGN)
 ### PRIMAL
 
 
+## Environments
+
+### MAgent2
+
+The code for parallel execution:
+
+```python
+# from magent2.environments.adversarial_pursuit import parallel_env
+# from magent2.environments.battle import parallel_env
+# from magent2.environments.battlefield import parallel_env
+# from magent2.environments.combined_arms import parallel_env
+# from magent2.environments.gather import parallel_env, raw_env
+from magent2.environments.tiger_deer import parallel_env
+
+render_mode='human'
+# render_mode=None
+
+env = parallel_env(render_mode=render_mode, max_cycles=200)
+observations, infos = env.reset()
+
+i_step = 0
+while env.agents:
+    # this is where you would insert your policy
+    actions = {agent: env.action_space(agent).sample() for agent in env.agents}
+
+    observations, rewards, terminations, truncations, infos = env.step(actions)
+
+    i_step += 1
+    print(f'{i_step}')
+    # time.sleep(0.1)
+env.close()
+```
+
+Envs: [https://github.com/Farama-Foundation/MAgent2/tree/main/magent2/environments](https://github.com/Farama-Foundation/MAgent2/tree/main/magent2/environments)
+
+
 
 ## Credits
 
