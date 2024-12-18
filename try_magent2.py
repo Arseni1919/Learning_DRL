@@ -1,4 +1,4 @@
-import time
+
 
 from magent2.environments import battle_v4, battlefield_v5, combined_arms_v6
 from magent2.environments import tiger_deer_v3, tiger_deer_v4, gather_v5
@@ -6,18 +6,18 @@ from pettingzoo.utils import random_demo
 
 
 
-
 # from magent2.environments.adversarial_pursuit import parallel_env
 # from magent2.environments.battle import parallel_env
-# from magent2.environments.battlefield import parallel_env
+from magent2.environments.battlefield import parallel_env
 # from magent2.environments.combined_arms import parallel_env
-# from magent2.environments.gather import parallel_env, raw_env
-from magent2.environments.tiger_deer import parallel_env
+# from magent2.environments.gather import parallel_env
+# from magent2.environments.tiger_deer import parallel_env
+import time
 
 render_mode='human'
 # render_mode=None
 
-env = parallel_env(render_mode=render_mode, max_cycles=200)
+env = parallel_env(render_mode=render_mode, max_cycles=200, minimap_mode=False)
 observations, infos = env.reset()
 
 i_step = 0
@@ -29,7 +29,7 @@ while env.agents:
 
     i_step += 1
     print(f'{i_step}')
-    # time.sleep(0.1)
+    time.sleep(0.01)
 env.close()
 
 
