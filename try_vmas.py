@@ -5,17 +5,17 @@ import vmas
 # Create the environment
 env = vmas.make_env(
     # scenario="waterfall", # can be scenario name or BaseScenario class
-    # scenario="dropout", # can be scenario name or BaseScenario class
-    # scenario="transport", # can be scenario name or BaseScenario class
-    # scenario="wheel", # can be scenario name or BaseScenario class
-    # scenario="drone", # can be scenario name or BaseScenario class
-    # scenario="kinematic_bicycle", # can be scenario name or BaseScenario class
-    # scenario="road_traffic", # can be scenario name or BaseScenario class
-    # scenario="multi_give_way", # can be scenario name or BaseScenario class
-    # scenario="football", # can be scenario name or BaseScenario class
-    # scenario="give_way", # can be scenario name or BaseScenario class
-    # scenario="simple", # can be scenario name or BaseScenario class
-    scenario="simple_adversary", # can be scenario name or BaseScenario class
+    # scenario="dropout",
+    # scenario="transport",
+    # scenario="wheel",
+    # scenario="drone",
+    # scenario="kinematic_bicycle",
+    # scenario="road_traffic",
+    # scenario="multi_give_way",
+    # scenario="football",
+    # scenario="give_way",
+    # scenario="simple",
+    scenario="simple_adversary",
     num_envs=32,
     device="cpu", # Or "cuda" for GPU
     continuous_actions=True,
@@ -29,7 +29,6 @@ obs = env.reset()
 # Step it with deterministic actions (all agents take their maximum range action)
 for i in range(1000):
     obs, rews, dones, info = env.step(env.get_random_actions())
-    # time.sleep(0.1)
     print(i)
     env.render(
         # mode="rgb_array",  # "rgb_array" returns image, "human" renders in display
