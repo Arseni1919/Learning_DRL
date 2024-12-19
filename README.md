@@ -133,10 +133,25 @@ Temporal relation regularization:
 
 <img src="pics/dgn3.png" width="700">
 
-
-Code: [https://github.com/PKU-RL/DGN](https://github.com/PKU-RL/DGN)
-
 ### QTRAN
+
+- Code: [https://github.com/himelbrand/marl-qtran](https://github.com/himelbrand/marl-qtran)
+
+Also value-based algorithm like VDN and QMix.
+VDN uses sum for the values, QMix uses monotonicity assumption.
+VDN and QMIX address only a fraction of factorizable MARL tasks due to their structural constraint in factorization such as additivity and monotonicity. 
+QTRAN is a new factorization method for MARL, which is free from such structural constraints and takes on a new approach to transforming the original joint action-value function into an easily factorizable one, with the same optimal actions. 
+QTRAN guarantees more general factorization than VDN or QMIX, thus covering a much wider class of MARL tasks than does previous methods.
+
+One of the main big ideas here in QTRAN is that rather than directly factorizing Q function (VDN did it by sum and QMix did it by non-linear NN), the authors consider an alternative joint action-value
+function that is factorized by additive decomposition, but the Q function (and V function) itself is learned separately from the agents.
+
+- very complex
+- have good theoretical properties
+
+A toy example where QTRAN is better than VDN and QMix:
+
+<img src="pics/qtran_toy_example.png" width="700">
 
 The architecture of QTRAN is as follows: 
 
