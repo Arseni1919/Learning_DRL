@@ -151,7 +151,7 @@ function that is factorized by additive decomposition, but the Q function (and V
 
 A toy example where QTRAN is better than VDN and QMix:
 
-<img src="pics/qtran_toy_example.png" width="700">
+<img src="pics/qtran_toy_example.png" width="400">
 
 The architecture of QTRAN is as follows: 
 

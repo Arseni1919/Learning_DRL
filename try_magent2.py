@@ -8,14 +8,17 @@ from pettingzoo.utils import random_demo
 
 # from magent2.environments.adversarial_pursuit import parallel_env
 # from magent2.environments.battle import parallel_env
-from magent2.environments.battlefield import parallel_env
+# from magent2.environments.battlefield import parallel_env
 # from magent2.environments.combined_arms import parallel_env
-# from magent2.environments.gather import parallel_env
+from magent2.environments.gather import parallel_env
 # from magent2.environments.tiger_deer import parallel_env
 import time
 
 render_mode='human'
 # render_mode=None
+
+# for tiger_deer end to change n of agents -> change map_size
+# env = parallel_env(map_size=10, render_mode=render_mode, max_cycles=200, minimap_mode=False)
 
 env = parallel_env(render_mode=render_mode, max_cycles=200, minimap_mode=False)
 observations, infos = env.reset()
