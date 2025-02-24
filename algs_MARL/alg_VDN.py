@@ -177,8 +177,8 @@ def main():
 
 
     # for plots
-    # to_plot = True
-    to_plot = False
+    to_plot = True
+    # to_plot = False
     running_reward = 0
     running_rewards: List[int] = []
     ep_rewards: List[int] = []

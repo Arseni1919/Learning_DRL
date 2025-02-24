@@ -1,9 +1,14 @@
 # Learning Deep Reinforcement Learning (DRL) and Multi-Agent DRL
 
-
+[//]: # (##########################################################)
+[//]: # (##########################################################)
+[//]: # (##########################################################)
 ## RL Algorithms 
 
 ### DQN Algorithm
+
+- Paper:
+- Code: [PyTorch | DQN](https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html)
 
 Gradient:
 
@@ -15,9 +20,18 @@ Pseudo-code:
 
 ### Double DQN
 
+- Paper:
+- Code:
+
 ### REINFORCE
 
+- Paper:
+- Code: [PyTorch | REINFORCE, Actor-Critic Examples](https://github.com/pytorch/examples/tree/main/reinforcement_learning)
+
 ### Actor-Critic
+
+- Paper:
+- Code: [PyTorch | REINFORCE, Actor-Critic Examples](https://github.com/pytorch/examples/tree/main/reinforcement_learning)
 
 Pseudo-code:
 
@@ -26,11 +40,17 @@ Pseudo-code:
 
 ### DDPG
 
+- Paper:
+- Code: [Medium | DDPG](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
+
 Pseudo-code:
 
 <img src="pics/ddpg_v2.png" width="700">
 
-### SAC
+### PPO
+
+- Paper:
+- Code: [colab | PPO](https://colab.research.google.com/github/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_colab.ipynb)
 
 Pseudo-code:
 
@@ -38,12 +58,23 @@ Pseudo-code:
 
 ### TD3
 
+- Paper:
+- Code: 
+  - [Medium | TD3](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
+
 Pseudo-code:
 
 <img src="pics/td3_v2.png" width="700">
 
 
 ### SAC
+
+- Paper:
+- Code:
+  - [Medium | TD3](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
+  - [colab | SAC](https://colab.research.google.com/github/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_colab.ipynb#scrollTo=Z4VJcUT2GlJz) ([github](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO.py))
+  - [cleanrl | SAC](https://github.com/vwxyzjn/cleanrl/blob/master/cleanrl/ppo_continuous_action.py) ([github](https://github.com/vwxyzjn/cleanrl/blob/master/cleanrl/sac_continuous_action.py))
+  - [Medium | SAC](https://towardsdatascience.com/soft-actor-critic-demystified-b8427df61665) ([github](https://github.com/vaishak2future/sac/blob/master/sac.ipynb))
 
 Pseudo-code:
 
@@ -54,6 +85,12 @@ Pseudo-code:
 
 <img src="pics/rl_history.png" width="700">
 
+--- 
+
+
+[//]: # (##########################################################)
+[//]: # (##########################################################)
+[//]: # (##########################################################)
 ## MARL Algorithms
 
 ### IQL
@@ -108,6 +145,7 @@ The architecture:
 
 ### DGN
 
+- Paper: [https://arxiv.org/pdf/1810.09202](https://arxiv.org/pdf/1810.09202)
 - Code: [https://github.com/PKU-RL/DGN](https://github.com/PKU-RL/DGN)
 
 The main idea is to use the underlying connection graph of agents.
@@ -162,20 +200,60 @@ Pseudocode:
 <img src="pics/qtran_pseudocode.png" width="700">
 
 
-### IPPO
+### IPPO (2022)
+
+- Paper: [https://arxiv.org/pdf/2011.09533](https://arxiv.org/pdf/2011.09533)
+- Code:
+
+
+
 ### ROMA
+
+- Paper: 
+- Code:
+
 ### MADDPG
+
+- Paper: 
+- Code:
+
 ### QPlex
+
+- Paper: 
+- Code:
+
 ### MAPPO
+
+- Paper: 
+- Code:
+
 ### Belief-PPO
+
+- Paper: 
+- Code:
+
 ### IDDPG
+
+- Paper: 
+- Code:
+
 ### SHAQ
 
+- Paper: 
+- Code:
+
+---
+
+[//]: # (##########################################################)
+[//]: # (##########################################################)
+[//]: # (##########################################################)
 ## MARL for MAPF
 
 ### PRIMAL
 
-
+[//]: # (##########################################################)
+[//]: # (##########################################################)
+[//]: # (##########################################################)
 ## Environments
 
 ### MAgent2
@@ -314,7 +392,9 @@ if __name__ == '__main__':
 ```
 
 
-
+[//]: # (##########################################################)
+[//]: # (##########################################################)
+[//]: # (##########################################################)
 ## Credits
 
 Stand on the shoulders of giants.
