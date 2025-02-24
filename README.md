@@ -7,7 +7,7 @@
 
 ### DQN Algorithm
 
-- Paper:
+- Paper: [https://arxiv.org/pdf/1312.05602](https://arxiv.org/pdf/1312.05602)
 - Code: [PyTorch | DQN](https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html)
 
 Gradient:
@@ -20,17 +20,16 @@ Pseudo-code:
 
 ### Double DQN
 
-- Paper:
-- Code:
+- Paper: [https://ojs.aaai.org/index.php/AAAI/article/view/10295](https://ojs.aaai.org/index.php/AAAI/article/view/10295)
+- Code: -
 
 ### REINFORCE
 
-- Paper:
-- Code: [PyTorch | REINFORCE, Actor-Critic Examples](https://github.com/pytorch/examples/tree/main/reinforcement_learning)
+- Explanation: [PyTorch | REINFORCE, Actor-Critic Examples](https://github.com/pytorch/examples/tree/main/reinforcement_learning)
 
 ### Actor-Critic
 
-- Paper:
+- Paper: [https://proceedings.mlr.press/v48/mniha16.pdf](https://proceedings.mlr.press/v48/mniha16.pdf)
 - Code: [PyTorch | REINFORCE, Actor-Critic Examples](https://github.com/pytorch/examples/tree/main/reinforcement_learning)
 
 Pseudo-code:
@@ -40,7 +39,7 @@ Pseudo-code:
 
 ### DDPG
 
-- Paper:
+- Paper: [https://arxiv.org/pdf/1509.02971](https://arxiv.org/pdf/1509.02971)
 - Code: [Medium | DDPG](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
 
 Pseudo-code:
@@ -49,7 +48,7 @@ Pseudo-code:
 
 ### PPO
 
-- Paper:
+- Paper: [https://arxiv.org/pdf/1707.06347](https://arxiv.org/pdf/1707.06347)
 - Code: [colab | PPO](https://colab.research.google.com/github/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_colab.ipynb)
 
 Pseudo-code:
@@ -58,7 +57,7 @@ Pseudo-code:
 
 ### TD3
 
-- Paper:
+- Paper: [https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf](https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf)
 - Code: 
   - [Medium | TD3](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
 
@@ -69,7 +68,7 @@ Pseudo-code:
 
 ### SAC
 
-- Paper:
+- Paper: [https://proceedings.mlr.press/v80/haarnoja18b/haarnoja18b.pdf](https://proceedings.mlr.press/v80/haarnoja18b/haarnoja18b.pdf)
 - Code:
   - [Medium | TD3](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
   - [colab | SAC](https://colab.research.google.com/github/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_colab.ipynb#scrollTo=Z4VJcUT2GlJz) ([github](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO.py))
@@ -95,12 +94,16 @@ Pseudo-code:
 
 ### IQL
 
+- Paper: [https://proceedings.mlr.press/v70/foerster17b/foerster17b.pdf](https://proceedings.mlr.press/v70/foerster17b/foerster17b.pdf)
+
 The idea is simple. Just run independent RL agents in some environments. 
 The main problem: nonstationarity of the world that is dependent on actions of other agents. Surprisingly, in some cases IQL works great (e.g. ping-pong env). 
 In [IQL (2015)](https://arxiv.org/abs/1511.08779) paper the authors show how by playing with the reward definitions the behaviour of agents change from cooperative to competitive.
 
 
-### VDN
+### VDN (2017)
+
+- Paper: [https://arxiv.org/pdf/1706.05296](https://arxiv.org/pdf/1706.05296)
 
 Implicitly, the value decomposition network aims to learn an optimal linear value decomposition from the team reward signal, 
 by back-propagating the total Q gradient through deep neural networks representing the individual component value functions.
@@ -115,7 +118,9 @@ Basic architecture:
 <img src="pics/vdn_basic_arc.png" width="700">
 
 
-### QMix
+### QMix (2018)
+
+- Paper: [https://www.jmlr.org/papers/volume21/20-081/20-081.pdf](https://www.jmlr.org/papers/volume21/20-081/20-081.pdf)
 
 QMIX is a value-based method that can train decentralised policies in a centralised end-to-end fashion. 
 QMIX employs a network that estimates joint action-values as a complex non-linear combination of per-agent values that condition only on local observations. 
@@ -129,7 +134,9 @@ The graphical representation of QMix NNs:
 <img src="pics/qmix.png" width="700">
 
 
-### COMA
+### COMA (2018)
+
+- Paper: [https://ojs.aaai.org/index.php/AAAI/article/view/11794](https://ojs.aaai.org/index.php/AAAI/article/view/11794)
 
 Counterfactual Multi-Agent (COMA) is an actor-critic algorithm with a centralised critic.
 Three main ideas underly COMA:
@@ -143,36 +150,9 @@ The architecture:
 
 <img src="pics/coma.png" width="700">
 
-### DGN
+### QTRAN (2019)
 
-- Paper: [https://arxiv.org/pdf/1810.09202](https://arxiv.org/pdf/1810.09202)
-- Code: [https://github.com/PKU-RL/DGN](https://github.com/PKU-RL/DGN)
-
-The main idea is to use the underlying connection graph of agents.
-No additional information about the state is not provided.
-
-DGN consists of three types of modules: (1) observation encoder, (2) convolutional layer and (3) Q network, as illustrated in Figure 1 below. 
-The local observation $o^h_i$ is encoded into a feeture vector $h^{'t}_i$ by MLP for low-dimensional input or CNN for visual input. 
-The convolutional layer integrates the feature vectors in the local region (including node $i$ and its neighbors $B_i$) and generates the
-latent feature vector $h^{'t}_i$. 
-By stacking more convolutional layers, the receptive ﬁeld of an agent gradually grows, where more information is gathered, and thus the scope of cooperation can also increase.
-
-In the paper the experiments are done with the `MAgent` environments. 
-
-The overview of three modules of DGN:
-
-<img src="pics/dgn.png" width="700">
-
-Computational layer (relation kernel):
-
-<img src="pics/dgn2.png" width="700">
-
-Temporal relation regularization:
-
-<img src="pics/dgn3.png" width="700">
-
-### QTRAN
-
+- Paper: [https://proceedings.mlr.press/v97/son19a/son19a.pdf](https://proceedings.mlr.press/v97/son19a/son19a.pdf)
 - Code: [https://github.com/himelbrand/marl-qtran](https://github.com/himelbrand/marl-qtran)
 
 Also value-based algorithm like VDN and QMix.
@@ -200,6 +180,34 @@ Pseudocode:
 <img src="pics/qtran_pseudocode.png" width="700">
 
 
+### DGN (2020)
+
+- Paper: [https://arxiv.org/pdf/1810.09202](https://arxiv.org/pdf/1810.09202)
+- Code: [https://github.com/PKU-RL/DGN](https://github.com/PKU-RL/DGN)
+
+The main idea is to use the underlying connection graph of agents.
+No additional information about the state is not provided.
+
+DGN consists of three types of modules: (1) observation encoder, (2) convolutional layer and (3) Q network, as illustrated in Figure 1 below. 
+The local observation $o^h_i$ is encoded into a feeture vector $h^{'t}_i$ by MLP for low-dimensional input or CNN for visual input. 
+The convolutional layer integrates the feature vectors in the local region (including node $i$ and its neighbors $B_i$) and generates the
+latent feature vector $h^{'t}_i$. 
+By stacking more convolutional layers, the receptive ﬁeld of an agent gradually grows, where more information is gathered, and thus the scope of cooperation can also increase.
+
+In the paper the experiments are done with the `MAgent` environments. 
+
+The overview of three modules of DGN:
+
+<img src="pics/dgn.png" width="700">
+
+Computational layer (relation kernel):
+
+<img src="pics/dgn2.png" width="700">
+
+Temporal relation regularization:
+
+<img src="pics/dgn3.png" width="700">
+
 ### IPPO (2022)
 
 - Paper: [https://arxiv.org/pdf/2011.09533](https://arxiv.org/pdf/2011.09533)
@@ -207,9 +215,9 @@ Pseudocode:
 
 
 
-### ROMA
+### ROMA (2020)
 
-- Paper: 
+- Paper: [https://arxiv.org/pdf/2003.08039](https://arxiv.org/pdf/2003.08039)
 - Code:
 
 ### MADDPG
@@ -222,14 +230,14 @@ Pseudocode:
 - Paper: 
 - Code:
 
-### MAPPO
+### MAPPO (2022)
 
-- Paper: 
+- Paper: [https://proceedings.neurips.cc/paper_files/paper/2022/file/9c1535a02f0ce079433344e14d910597-Paper-Datasets_and_Benchmarks.pdf](https://proceedings.neurips.cc/paper_files/paper/2022/file/9c1535a02f0ce079433344e14d910597-Paper-Datasets_and_Benchmarks.pdf)
 - Code:
 
-### Belief-PPO
+### Belief-PPO (2023)
 
-- Paper: 
+- Paper: [https://www.ijcai.org/proceedings/2023/0039.pdf](https://www.ijcai.org/proceedings/2023/0039.pdf)
 - Code:
 
 ### IDDPG
@@ -237,9 +245,9 @@ Pseudocode:
 - Paper: 
 - Code:
 
-### SHAQ
+### SHAQ (2023)
 
-- Paper: 
+- Paper: [https://proceedings.neurips.cc/paper_files/paper/2022/file/27985d21f0b751b933d675930aa25022-Paper-Conference.pdf](https://proceedings.neurips.cc/paper_files/paper/2022/file/27985d21f0b751b933d675930aa25022-Paper-Conference.pdf)
 - Code:
 
 ---
