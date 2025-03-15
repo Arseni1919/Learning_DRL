@@ -92,9 +92,10 @@ Pseudo-code:
 [//]: # (##########################################################)
 ## MARL Algorithms
 
-### IQL
+### IQL (1993, 2015)
 
-- Paper: [https://proceedings.mlr.press/v70/foerster17b/foerster17b.pdf](https://proceedings.mlr.press/v70/foerster17b/foerster17b.pdf)
+- Paper (1993): [https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=b3fc56876ad1cdf35ad4af13b991bbb24d219bd9](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=b3fc56876ad1cdf35ad4af13b991bbb24d219bd9)
+- Paper (2015): [https://proceedings.mlr.press/v70/foerster17b/foerster17b.pdf](https://proceedings.mlr.press/v70/foerster17b/foerster17b.pdf)
 
 The idea is simple. Just run independent RL agents in some environments. 
 The main problem: nonstationarity of the world that is dependent on actions of other agents. Surprisingly, in some cases IQL works great (e.g. ping-pong env). 
@@ -213,16 +214,44 @@ Temporal relation regularization:
 - Paper: [https://arxiv.org/pdf/2011.09533](https://arxiv.org/pdf/2011.09533)
 - Code:
 
+Each agent `a` learns a local observation based critic $V_φ(z^a_t )$ parameterised by $φ$ using Generalized Advantage Estimation (GAE).
+The network parameters $φ, θ$ are shared across critics, and actors, respectively.
+The authors also add an entropy regularization term to the ﬁnal policy loss.
+For each agent, the overall learning loss becomes:
+
+<img src="pics/ippo_1.png" width="700">
+
+The architecture is three `conv1d` layers and two MLP layers.
+
+The algorithms outperforms QMIX and others on the SMAC env.
+It seems that IPPO's (approximate) surrogate objective might mitigate certain forms of environment non-stationarity that other independent learning algorithms are prone to, e.g., by suppressing updates catastrophic to performance.
+
+In general, the idea is that IL is somehow surprisingly can be ok. The authors are unsure exactly why is that a case, probably because of the magic of the PPO's surrogate objective.
+
+#### General Comments on the Paper
+THe authors used very complicated language.
 
 
 ### ROMA (2020)
 
-- Paper: [https://arxiv.org/pdf/2003.08039](https://arxiv.org/pdf/2003.08039)
-- Code:
+- Paper: [ROMA: Multi-Agent Reinforcement Learning with Emergent Roles](https://arxiv.org/pdf/2003.08039)
+- Code: ~
 
-### MADDPG
+The paper introduces a concept of _role_ into MARL. 
+The idea is that this concept will allow to agents to specialize in their specific tasks and hence improve performance. The trick is that many agents have similar roles, so they can enjoy from mutual learning. But how to distinguish between different roles, so that non-related agent will not disturb others?
+The authors define three properties that are important for every role: (1) it needs to be dynamic to the changes of an env; (2) it needs to identiﬁable, i.e. to be temporary stable, so that the behaviour is consistent with time; (3) it needs to be specialized so that different robots can identify each other's roles and to be able to learn from agents with similar roles.
+So the ROMA works as follows (plus-minus): it encodes the trajectory into role, composes the loss for _identiﬁable_ property. Then, it computes the loss for _specialized_ property. Then, it uses the QMIX loss for the $Q_{tot}$. After the reword the gradients propagate back.
 
-- Paper: 
+The method achieved SOTA results on the SMAC benchmark. That is good. But the disadvantage is that the method is relatively complicated. There are 5 learnable different NNs, the loss function is complex, and there are many parameters. 
+Maybe that is why ROMA is not used as a benchmark in the papers that came afterword.
+
+
+<img src="pics/roma_1.png" width="700">
+
+### MADDPG (2020)
+
+- Paper: [Multi-Agent Actor-Critic for Mixed
+Cooperative-Competitive Environments](https://proceedings.neurips.cc/paper/2017/file/68a9750337a418a86fe06c1991a1d64c-Paper.pdf)
 - Code:
 
 ### QPlex
