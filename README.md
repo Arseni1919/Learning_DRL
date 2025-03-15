@@ -229,7 +229,7 @@ It seems that IPPO's (approximate) surrogate objective might mitigate certain fo
 In general, the idea is that IL is somehow surprisingly can be ok. The authors are unsure exactly why is that a case, probably because of the magic of the PPO's surrogate objective.
 
 #### General Comments on the Paper
-THe authors used very complicated language.
+The authors used a very complicated language.
 
 
 ### ROMA (2020)
