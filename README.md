@@ -118,6 +118,7 @@ Pseudo-code:
 ### Terms
 
 - `non-stationary` - each agent’s policy is changing as training progresses, and the environment becomes non-stationary from the perspective of any individual agent (in a way that is not explainable by changes in the agent’s own policy)
+- `CTDE` - centralised training decentralised execution
 - `IGM (Individual-Global-Max)` - To enable effective CTDE for multi-agent Q-learning, it is critical that the joint greedy action should be equivalent to the collection of individual greedy actions of agents, which is called the IGM (Individual-Global-Max) principle (Son et al., 2019).
 
 ### IQL (1993, 2015)
