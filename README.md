@@ -18,10 +18,17 @@ Pseudo-code:
 
 <img src="pics/dqn1.png" width="700">
 
-### Double DQN
+### Double DQN (2016)
 
-- Paper: [https://ojs.aaai.org/index.php/AAAI/article/view/10295](https://ojs.aaai.org/index.php/AAAI/article/view/10295)
-- Code: -
+- Paper: [Deep Reinforcement Learning with Double Q-Learning](https://ojs.aaai.org/index.php/AAAI/article/view/10295)
+- Code: ~
+
+### Dueling DQN (2016)
+
+- Paper: [Dueling Network Architectures for Deep Reinforcement Learning](https://proceedings.mlr.press/v48/wangf16.pdf)
+- Code: ~
+
+<img src="pics/dueling_dqn_1.png" width="700">
 
 ### REINFORCE
 
@@ -91,6 +98,11 @@ Pseudo-code:
 [//]: # (##########################################################)
 [//]: # (##########################################################)
 ## MARL Algorithms
+
+### Terms
+
+- `non-stationary` - each agent’s policy is changing as training progresses, and the environment becomes non-stationary from the perspective of any individual agent (in a way that is not explainable by changes in the agent’s own policy)
+- `IGM (Individual-Global-Max)` - To enable effective CTDE for multi-agent Q-learning, it is critical that the joint greedy action should be equivalent to the collection of individual greedy actions of agents, which is called the IGM (Individual-Global-Max) principle (Son et al., 2019).
 
 ### IQL (1993, 2015)
 
@@ -228,8 +240,7 @@ It seems that IPPO's (approximate) surrogate objective might mitigate certain fo
 
 In general, the idea is that IL is somehow surprisingly can be ok. The authors are unsure exactly why is that a case, probably because of the magic of the PPO's surrogate objective.
 
-#### General Comments on the Paper
-The authors used a very complicated language.
+In the paper, the authors used a very complicated language.
 
 
 ### ROMA (2020)
@@ -252,12 +263,33 @@ Maybe that is why ROMA is not used as a benchmark in the papers that came afterw
 
 - Paper: [Multi-Agent Actor-Critic for Mixed
 Cooperative-Competitive Environments](https://proceedings.neurips.cc/paper/2017/file/68a9750337a418a86fe06c1991a1d64c-Paper.pdf)
-- Code:
+- The env they used: [PettingZoo - MPE](https://pettingzoo.farama.org/environments/mpe/)
+- Code: ~
 
-### QPlex
+In this paper, the authors adapt DDPG to the multi-agent case.
+They describe the same problems of non-stationary and that it is tricky to use memory buffer in the multi-agent case.
+Their trick is that there is a separate $Q_i$ function for every agent $i$. And each such function sees the actions, observations and, potentially, policies of other agents. They also describe how to approximate policies of other agents using only their observations.
+Another trick for competitive environments is to preserve several policies for every agent and to switch between them randomly during both the training and the execution.
+The schema of the algorithms is in the following pic:
 
-- Paper: 
-- Code:
+<img src="pics/maddpg_1.png" width="300">
+
+The pseudo-code of MADDPG is as follows:
+
+<img src="pics/maddpg_2.png" width="700">
+
+The paper presented no theoretical guarantees.
+A really well-written paper, I should say.
+
+
+### QPlex (2021)
+
+- Paper: [QPLEX: DUPLEX DUELING MULTI-AGENT Q-LEARNING](https://arxiv.org/pdf/2008.01062)
+- Env: [SMAC](https://github.com/oxwhirl/smac/tree/master)
+- Code: ~
+
+<img src="pics/qplex_1.png" width="700">
+
 
 ### MAPPO (2022)
 
