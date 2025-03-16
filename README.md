@@ -28,7 +28,7 @@ Pseudo-code:
 - Paper: [Dueling Network Architectures for Deep Reinforcement Learning](https://proceedings.mlr.press/v48/wangf16.pdf)
 - Code: ~
 
-<img src="pics/dueling_dqn_1.png" width="700">
+<img src="pics/dueling_dqn_1.png" width="300">
 
 ### REINFORCE
 
