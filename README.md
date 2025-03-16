@@ -26,9 +26,25 @@ Pseudo-code:
 ### Dueling DQN (2016)
 
 - Paper: [Dueling Network Architectures for Deep Reinforcement Learning](https://proceedings.mlr.press/v48/wangf16.pdf)
+- Env: [Farama | Atari Games](https://ale.farama.org/environments/)
 - Code: ~
 
+In this paper, the authors showed a nice trick to change the structure of the NNs inside already existing DRL algorithms, that provides better results.
+They separated the $Q$-network from a single stream that outputs a value per each action to two separate streams for the $V$ part (state value) and $A$ parts (advantage values for every action). The illustration of the idea is presented here:
+
 <img src="pics/dueling_dqn_1.png" width="500">
+
+The question is how to combine the two outputs to get the required $Q$ value at the end. The naive approach to sum the $V$ and $A$ parts does not work. The authors say that this way the effect of separation cancels out.
+So the alternative is to subtract from the advantage values the maximum $A$ value or.. the average of $A$ values as here:
+
+<img src="pics/dueling_dqn_2.png" width="500">
+
+Note that $Q(s, a*) = V(s,a*)$ and $A(s, a*) = 0$, where $a*$ is the best action. That's why the formula makes sense.
+
+The great part of this new trick is that it naturally provides two following advantages:
+
+1. **The $V$ part is updated with every $Q$ update in the dueling schema, unlike previous approaches:** "The dueling architecture has an ability to learn the state-value function efﬁciently. With every update of the Q values in the dueling architecture, the value stream $V$ is updated – this contrasts with the updates in a single-stream architecture where only the value of one actions is updated, the values for all other actions remain untouched. This more frequent updating of the value stream allocates more resources to $V$, and thus allows for better approximation of the state values, which need to be accurate for temporal-difference-based methods like $Q$-learning to work (Sutton & Barto, 1998). This phenomenon is reﬂected in the experiments, where the advantage of the dueling architecture over single-stream $Q$ networks grows when the number of actions is large."
+2. **Dueling separation helps to distinguish between small differences in action values:** "The differences between $Q$-values for a given state are often very small relative to the magnitude of $Q$. For example, after training with DDQN on the game of Seaquest, the average action gap (the gap between the Q values of the best and the second best action in a given state) across visited states is roughly 0.04, whereas the average state value across those states is about 15. This difference in scale means that small amount of noise in the updates could reorder the actions, and thus making the nearly greedy policy switch abruptly. The dueling architecture with its separate advantage stream is robust to such effects."
 
 ### REINFORCE
 
@@ -272,7 +288,7 @@ Their trick is that there is a separate $Q_i$ function for every agent $i$. And 
 Another trick for competitive environments is to preserve several policies for every agent and to switch between them randomly during both the training and the execution.
 The schema of the algorithms is in the following pic:
 
-<img src="pics/maddpg_1.png" width="500">
+<img src="pics/maddpg_1.png" width="400">
 
 The pseudo-code of MADDPG is as follows:
 
@@ -281,6 +297,29 @@ The pseudo-code of MADDPG is as follows:
 The paper presented no theoretical guarantees.
 A really well-written paper, I should say.
 
+### Qatten (2020)
+
+- Paper: [Qatten: A General Framework for Cooperative Multiagent Reinforcement Learning](https://arxiv.org/pdf/2002.03939)
+- Env: [SMAC](https://github.com/oxwhirl/smac/tree/master)
+- Code: ~
+
+This paper generalizes the VDN, QMIX, and QTRAN findings. They all use some combination of $Q_i$ values to compose the $Q_{tot}$ function.
+The Qatten paper generalizes the idea in the following Theorem:
+
+<img src="pics/Qatten_1.png" width="700">
+
+Basically, it says that, given every state $s$, there are some linear combinations of $Q$ values that properly describe $Q_{tot}$.
+Then they presented the approximation for this ideal$Q_{tot}$ in order to construct an algorithm: 
+
+<img src="pics/Qatten_2.png" width="700">
+
+An the overall algorithm schema is presented here:
+
+<img src="pics/Qatten_3.png" width="700">
+
+The achieved SOTA results at the time. They used multi-head attention as the ultimate approximator for the $\lambda$ values, referring to this paper: ["ARE TRANSFORMERS UNIVERSAL APPROXIMATORS OF SEQUENCE-TO-SEQUENCE FUNCTIONS?" (ICLR, 2020)](https://arxiv.org/pdf/1912.10077).
+The details of the formulas are hard to track, unfortunately.
+
 
 ### QPlex (2021)
 
@@ -288,13 +327,23 @@ A really well-written paper, I should say.
 - Env: [SMAC](https://github.com/oxwhirl/smac/tree/master)
 - Code: ~
 
+This paper defines advantage-based IGM (_individual global max_) principle and bridges it with the original IGM principle. This principle was used by previous algorithms such as VDN, QMIX, and QTRAN. There, they said that the combination of individual $Q$ values compose the total $Q$ value. So, in this paper, the authors declare that it is more beneficial to look at the advantage values $A$ instead of $Q$ values. The inspiration is taken from the "Dueling DQN" paper (explained earlier).
+Not only that, the paper also took inspiration from "Qatten" paper to combine the $A$ values in a cleaver manner.
+The overall flow of the algorithm is here: 
+
 <img src="pics/qplex_1.png" width="700">
 
+The bad news, once again as in "Qatten" paper, the approach is complex and it is hard to fully understand the theoretical strength of the paper.
+
+They took the smart combination of $Q$ values from "Qatten" paper, attention mechanism, duelling trick from the "Dueling DQN" paper and smashed it all together on top of the MARL problem and it worked.
 
 ### MAPPO (2022)
 
-- Paper: [https://proceedings.neurips.cc/paper_files/paper/2022/file/9c1535a02f0ce079433344e14d910597-Paper-Datasets_and_Benchmarks.pdf](https://proceedings.neurips.cc/paper_files/paper/2022/file/9c1535a02f0ce079433344e14d910597-Paper-Datasets_and_Benchmarks.pdf)
-- Code:
+- Paper: [The Surprising Effectiveness of PPO in Cooperative Multi-Agent Games](https://proceedings.neurips.cc/paper_files/paper/2022/file/9c1535a02f0ce079433344e14d910597-Paper-Datasets_and_Benchmarks.pdf)
+- Env: [SMAC](https://github.com/oxwhirl/smac/tree/master)
+- Code: [https://github.com/marlbenchmark/on-policy](https://github.com/marlbenchmark/on-policy)
+
+
 
 ### Belief-PPO (2023)
 
