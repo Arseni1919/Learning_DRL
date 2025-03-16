@@ -272,7 +272,7 @@ Their trick is that there is a separate $Q_i$ function for every agent $i$. And 
 Another trick for competitive environments is to preserve several policies for every agent and to switch between them randomly during both the training and the execution.
 The schema of the algorithms is in the following pic:
 
-<img src="pics/maddpg_1.png" width="300">
+<img src="pics/maddpg_1.png" width="500">
 
 The pseudo-code of MADDPG is as follows:
 
