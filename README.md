@@ -5,6 +5,10 @@
 [//]: # (##########################################################)
 ## RL Algorithms 
 
+### Terms 
+
+- `credit assignment problem` - This problem is a key source of difficulty in RL that is the long time delay between actions and their positive or negative effect on rewards
+
 ### DQN Algorithm
 
 - Paper: [https://arxiv.org/pdf/1312.05602](https://arxiv.org/pdf/1312.05602)
@@ -69,7 +73,24 @@ Pseudo-code:
 
 <img src="pics/ddpg_v2.png" width="700">
 
-### PPO
+### GAE (2016)
+
+- Paper: [HIGH-DIMENSIONAL CONTINUOUS CONTROL USING GENERALIZED ADVANTAGE ESTIMATION](https://arxiv.org/pdf/1506.02438)
+- Code: ~
+
+The idea of GAE is to implement $TD(\lambda)$ ideas on the advantage values instead of state-values.
+As in $TD(\lambda)$, GAE helps to balance between variance and bias of advantage values. 
+Here is the formulation of GAE:
+
+<img src="pics/gae_1.png" width="700">
+
+<img src="pics/gae_2.png" width="700">
+
+<img src="pics/gae_3.png" width="700">
+
+The usage of GAE is primarily in policy optimization algorithms (PPO, TRPO, etc.) to reduce variance without adding to much bias.
+
+### PPO (2017)
 
 - Paper: [https://arxiv.org/pdf/1707.06347](https://arxiv.org/pdf/1707.06347)
 - Code: [colab | PPO](https://colab.research.google.com/github/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_colab.ipynb)
@@ -341,15 +362,39 @@ They took the smart combination of $Q$ values from "Qatten" paper, attention mec
 ### MAPPO (2022)
 
 - Paper: [The Surprising Effectiveness of PPO in Cooperative Multi-Agent Games](https://proceedings.neurips.cc/paper_files/paper/2022/file/9c1535a02f0ce079433344e14d910597-Paper-Datasets_and_Benchmarks.pdf)
-- Env: [SMAC](https://github.com/oxwhirl/smac/tree/master)
+- Env: [SMAC](https://github.com/oxwhirl/smac/tree/master), [Google Research Football](https://github.com/google-research/football), [Hanabi](https://pettingzoo.farama.org/environments/classic/hanabi/), [MPE](https://pettingzoo.farama.org/environments/mpe/)
 - Code: [https://github.com/marlbenchmark/on-policy](https://github.com/marlbenchmark/on-policy)
+
+Basicalle, MAPPO works exactly like PPO.
+There is a common value function. The policy function may be common, if agents are similar, or different for every agent. The value function may use some global state info.
+When the authors implemented MAPPO, they wanted to point out the following 5 main advises for the implementation:
+
+1. **value normalisation**: Utilize value normalization to stabilize value learning. Keep track of averages and variances.
+2. **input representation to $V$ function**: use global data if applicable. Do not duplicate data.
+3. **training data usage**: do not overtrain on the batch.
+4. **PPO clipping**: very important - do the clipping. 0.2 worked well for them.
+5. **batch size**: use big batches for better performance.
+
+
+The pseudo-code from the paper:
+
+<img src="pics/mappo_1.png" width="700">
 
 
 
 ### Belief-PPO (2023)
 
-- Paper: [https://www.ijcai.org/proceedings/2023/0039.pdf](https://www.ijcai.org/proceedings/2023/0039.pdf)
-- Code:
+- Paper: [Dynamic Belief for Decentralized Multi-Agent Cooperative Learning](https://www.ijcai.org/proceedings/2023/0039.pdf)
+- Env: [SMAC](https://github.com/oxwhirl/smac/tree/master)
+- Code: ~
+
+Ok, here the setting is full decentralised. As far as I understand, they use beliefs (embedded policy approximations) of other agents to cover for the non-stationary problem. The authors use history of observations of other agents to infer their behaviour.
+Once again, the problem, imo, is that the approach, though achieves SOTA results, is very complex for simple peoples like me to quickly implement. Not trivial how to adjust all those NNs and attention mechanism. No code from authors neither. The paper uses a bit high language which complicated understanding. The formulas lack intuitive explanations. But the idea is nice, that is why the paper here.
+
+Here is the general structure of Belief-PPO:
+
+<img src="pics/belief_ppo_1.png" width="700">
+
 
 ### IDDPG
 
@@ -359,7 +404,42 @@ They took the smart combination of $Q$ values from "Qatten" paper, attention mec
 ### SHAQ (2023)
 
 - Paper: [https://proceedings.neurips.cc/paper_files/paper/2022/file/27985d21f0b751b933d675930aa25022-Paper-Conference.pdf](https://proceedings.neurips.cc/paper_files/paper/2022/file/27985d21f0b751b933d675930aa25022-Paper-Conference.pdf)
-- Code:
+- Code: [https://github.com/hsvgbkhgbv/shapley-q-learning](https://github.com/hsvgbkhgbv/shapley-q-learning)
+
+
+A simple example that describes Shapley Value principle from ChatGPT (hope it is correct):
+
+```txt
+Simple Example with Numbers
+Let's take a small example with two players: Alice and Bob.
+
+- Alice alone can make $100.
+- Bob alone can make $50.
+- Together, they make $200.
+
+The question is: how much did each contribute to the extra value created when they work together?
+
+- If Alice joins first, she contributes $100, then Bob joins and increases the total from $100 to $200, so his contribution is $100.
+- If Bob joins first, he contributes $50, then Alice joins and increases the total from $50 to $200, so her contribution is $150.
+
+Averaging these two cases:
+
+- Alice's Shapley value = (100+150)/2=125.
+- Bob's Shapley value = (50+100)/2=75.
+
+So, a fair split of the $200 profit is Alice = $125, Bob = $75.
+```
+
+The SHAQ paper the Shapley value principle to the fair division of reward in MARL case and achieves SOTA results, of course.
+The additional nice advantage is that with SHAQ we have some explainability of the reward distribution between agents.
+
+Pseudo-code: 
+
+<img src="pics/shaq_1.png" width="700">
+
+<img src="pics/shaq_2.png" width="700">
+
+As you can see the implementation is also not so simple. At list, they have code to play with in GitHub.
 
 ---
 
