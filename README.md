@@ -9,9 +9,9 @@
 
 - `credit assignment problem` - This problem is a key source of difficulty in RL that is the long time delay between actions and their positive or negative effect on rewards
 
-### DQN Algorithm
+### DQN (2013)
 
-- Paper: [https://arxiv.org/pdf/1312.05602](https://arxiv.org/pdf/1312.05602)
+- Paper: [Playing Atari with Deep Reinforcement Learning](https://arxiv.org/pdf/1312.05602)
 - Code: [PyTorch | DQN](https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html)
 
 Gradient:
@@ -54,9 +54,9 @@ The great part of this new trick is that it naturally provides two following adv
 
 - Explanation: [PyTorch | REINFORCE, Actor-Critic Examples](https://github.com/pytorch/examples/tree/main/reinforcement_learning)
 
-### Actor-Critic
+### Actor-Critic (2016)
 
-- Paper: [https://proceedings.mlr.press/v48/mniha16.pdf](https://proceedings.mlr.press/v48/mniha16.pdf)
+- Paper: [Asynchronous Methods for Deep Reinforcement Learning](https://proceedings.mlr.press/v48/mniha16.pdf)
 - Code: [PyTorch | REINFORCE, Actor-Critic Examples](https://github.com/pytorch/examples/tree/main/reinforcement_learning)
 
 Pseudo-code:
@@ -64,9 +64,9 @@ Pseudo-code:
 <img src="pics/valina_policy_gradient.png" width="700">
 
 
-### DDPG
+### DDPG (2016)
 
-- Paper: [https://arxiv.org/pdf/1509.02971](https://arxiv.org/pdf/1509.02971)
+- Paper: [CONTINUOUS CONTROL WITH DEEP REINFORCEMENT LEARNING](https://arxiv.org/pdf/1509.02971)
 - Code: [Medium | DDPG](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
 
 Pseudo-code:
@@ -92,16 +92,16 @@ The usage of GAE is primarily in policy optimization algorithms (PPO, TRPO, etc.
 
 ### PPO (2017)
 
-- Paper: [https://arxiv.org/pdf/1707.06347](https://arxiv.org/pdf/1707.06347)
+- Paper: [Proximal Policy Optimization Algorithms](https://arxiv.org/pdf/1707.06347)
 - Code: [colab | PPO](https://colab.research.google.com/github/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_colab.ipynb)
 
 Pseudo-code:
 
 <img src="pics/ppo.png" width="700">
 
-### TD3
+### TD3 (2018)
 
-- Paper: [https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf](https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf)
+- Paper: [Addressing Function Approximation Error in Actor-Critic Methods](https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf)
 - Code: 
   - [Medium | TD3](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
 
@@ -110,9 +110,9 @@ Pseudo-code:
 <img src="pics/td3_v2.png" width="700">
 
 
-### SAC
+### SAC (2018)
 
-- Paper: [https://proceedings.mlr.press/v80/haarnoja18b/haarnoja18b.pdf](https://proceedings.mlr.press/v80/haarnoja18b/haarnoja18b.pdf)
+- Paper: [Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor](https://proceedings.mlr.press/v80/haarnoja18b/haarnoja18b.pdf)
 - Code:
   - [Medium | TD3](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
   - [colab | SAC](https://colab.research.google.com/github/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_colab.ipynb#scrollTo=Z4VJcUT2GlJz) ([github](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO.py))
@@ -122,6 +122,30 @@ Pseudo-code:
 Pseudo-code:
 
 <img src="pics/sac_v2.png" width="700">
+
+
+### DreamerV3 (2023)
+
+- Paper: [Mastering Diverse Domains through World Models](https://arxiv.org/pdf/2301.04104v2)
+- Env: Atari, ProcGen, DMLab, Atari100k, Proprio Contral, Visual Control, BSuite, Minecraft
+- Code: [jax implementation (official)](https://danijar.com/project/dreamerv3/), [pytorch implementation](https://github.com/NM512/dreamerv3-torch?utm_source=chatgpt.com)
+
+DreamerV3 is a model-based RL algorithm that achieves SOTA results on many different domains, such as computer games, physics simulators, and other complex environments.
+The overall structure is as follows:
+
+1. the world model predicts the outcomes of potential actions ->
+2. the critic judges the value of each outcome ->
+3. the actor chooses actions to reach the most valuable outcomes
+
+Very simple. The majority of the paper is focused on adapting this algorithm to the 150 very diverse environments with a million tricks. The reason for that is that they want to build a single NN configuration (same NN weights) that will work everywhere.
+Unfortunately, the authors did not point out exactly was the algorithm so successful. Is it the scale? Is it the fact that the algorithm is model-based? Is it because numerous tricks for stabilisation? Or all of them combined?
+From my impression, the model of the world is the most critical part. If you can construct the world-model properly - it can benefit you a lot, as it is shown in the paper.
+
+THe overall schema of DreamerV3:
+
+<img src="pics/dreamerv3_1.png" width="700">
+
+> A perfect example for a paper that has a highly complex algorithm, but described lightly. After reading the paper you actually ending up with a feeling that you are smart and not stupid. And the code is open.
 
 
 ### RL Algorithms Interconnections
@@ -146,6 +170,9 @@ Pseudo-code:
 
 - Paper (1993): [https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=b3fc56876ad1cdf35ad4af13b991bbb24d219bd9](https://citeseerx.ist.psu.edu/document?repid=rep1&type=pdf&doi=b3fc56876ad1cdf35ad4af13b991bbb24d219bd9)
 - Paper (2015): [https://proceedings.mlr.press/v70/foerster17b/foerster17b.pdf](https://proceedings.mlr.press/v70/foerster17b/foerster17b.pdf)
+- Env: Pong video-game
+- Code: ~
+- My Code: [alg_IQL.py](algs_MARL/alg_IQL.py)
 
 The idea is simple. Just run independent RL agents in some environments. 
 The main problem: nonstationarity of the world that is dependent on actions of other agents. Surprisingly, in some cases IQL works great (e.g. ping-pong env). 
@@ -155,12 +182,16 @@ In [IQL (2015)](https://arxiv.org/abs/1511.08779) paper the authors show how by 
 ### VDN (2017)
 
 - Paper: [https://arxiv.org/pdf/1706.05296](https://arxiv.org/pdf/1706.05296)
+- Env: 
+- Code: ~
+- My code: [alg_VDN.py](algs_MARL/alg_VDN.py)
 
-Implicitly, the value decomposition network aims to learn an optimal linear value decomposition from the team reward signal, 
-by back-propagating the total Q gradient through deep neural networks representing the individual component value functions.
 
-This additive value decomposition is speciﬁcally motivated by avoiding the spurious reward signals that emerge in purely independent learners.
-The implicit value function learned by each agent depends only on local observations, and so is more easily learned.
+The paper is first to introduce the value decomposition principle. It does so with the additive approach (which means just to sum all Q values), namely $\sum_{i} Q_i$.
+The general motivation for the paper is fact the in fully centralised or fully decentralised systems there can be many cases when agents see spurious (fake, false) rewards, created by other agents but not by the actions of the given agent. So the agent is motivated by false signals and its learned policy is not adequate for its actual actions' influence on the world.
+So any logical value decomposition solves the issue; they chose a summation. Others, as we see further, chose more sophisticated methods of factorisation.
+
+The $Q$ function is created as follows:
 
 <img src="pics/vdn_q_function.png" width="700">
 
@@ -169,54 +200,90 @@ Basic architecture:
 <img src="pics/vdn_basic_arc.png" width="700">
 
 
-### QMix (2018)
+### IAC and COMA (2018)
 
-- Paper: [https://www.jmlr.org/papers/volume21/20-081/20-081.pdf](https://www.jmlr.org/papers/volume21/20-081/20-081.pdf)
-
-QMIX is a value-based method that can train decentralised policies in a centralised end-to-end fashion. 
-QMIX employs a network that estimates joint action-values as a complex non-linear combination of per-agent values that condition only on local observations. 
-THe authors structurally enforce that the joint-action value is monotonic in the per-agent values, which allows tractable maximisation of the joint action-value in off-policy learning, and guarantees consistency between the centralised and decentralised policies.
-
-Basically, QMix is like VDN but is not constrained to linear dependencies between agents' Q values.
-QMix also makes use of external state of the environment.
-
-The graphical representation of QMix NNs:
-
-<img src="pics/qmix.png" width="700">
-
-
-### COMA (2018)
-
-- Paper: [https://ojs.aaai.org/index.php/AAAI/article/view/11794](https://ojs.aaai.org/index.php/AAAI/article/view/11794)
+- Paper: [Counterfactual Multi-Agent Policy Gradients](https://ojs.aaai.org/index.php/AAAI/article/view/11794)
+- Env: [SMAC](https://github.com/oxwhirl/smac/tree/master)
+- Code: ~
 
 Counterfactual Multi-Agent (COMA) is an actor-critic algorithm with a centralised critic.
-Three main ideas underly COMA:
-1) centralisation of the critic, 
-2) use of a counterfactual baseline, and 
-3) use of a critic representation that allows efﬁcient evaluation of the baseline.
+Three main ideas of the COMA algorithm:
+1) centralisation of the critic, as in all CTDE algorithms 
+2) use of a counterfactual baseline
+3) use of a critic representation that allows efficient evaluation of the baseline
 
-COMA also uses external state of the environment in the learning stage.
+The idea of _counterfactual baseline_ is what is beautiful in this paper.
+Once again, as we said in the VDN part, the credit assignment is tricky in MARL. So one way to solve it, as COMA suggests, is to subtract from $Q_{tot}$ given agent's specific action $u^{a}$ the $Q_{tot}$ value where agent uses some other action $u^{'a}$. The formula is as follows:
 
+<img src="pics/coma_2.png" width="300">
+
+Then, COMA suggests a cleaver and simple architecture of the NN to efficiently get all the necessary values fast to calculate all these counterfactual baselines for every agent.
 The architecture:
 
-<img src="pics/coma.png" width="700">
+<img src="pics/coma_1.png" width="700">
+
+One of the baseline algorithms they used is Independent Actor-Critic (IAC) algorithm, that is just to use the same NN for actor and for critic for all agents but pretend that the learning is decentralized (the updates of the NNs are conditioned only on the local action-observation history of each agent).
+COMA can also use external state of the environment in the learning stage.
+Other papers, such as QMIX paper, say that COMA scales purly with the number of agents and learns slowly.
+
+
+
+### QMIX (2018)
+
+- Paper: [QMIX: Monotonic Value Function Factorisation for
+Deep Multi-Agent Reinforcement Learning](https://www.jmlr.org/papers/volume21/20-081/20-081.pdf)
+- Env: [SMAC](https://github.com/oxwhirl/smac/tree/master)
+- Code: ~
+
+QMIX is a value-based method that can train decentralised policies in a centralised end-to-end fashion. 
+QMIX employs a network that estimates joint action-values as a complex non-linear combination of per-agent values that condition only on local observations.
+The authors structurally enforce that the joint-action value is monotonic in the per-agent values, which allows tractable maximisation of the joint action-value in off-policy learning, and guarantees consistency between the centralised and decentralised policies.
+
+In simple terms, the authors claim that for consistency of local $Q_i$ values with the big $Q_{tot}$ value, it is sufficient to ensure that global _argmax_ yields the same result as local _argmax_ operations:
+
+<img src="pics/qmix_2.png" width="300">
+
+The paper claims that this type of requirement makes $Q_{tot}$ "trivially" tractable. Why it's so trivial, idk.
+Though VDN is sufficient to satisfy the aforementioned requirement, QMIX is open to a larger set of policies. Monotonicity can be enforced through a following constraint:
+
+<img src="pics/qmix_3.png" width="300">
+
+So that is why in the mixing part of the framework you can see that the values are in absolute terms for weights (not for biases).
+The graphical representation of QMIX NNs:
+
+<img src="pics/qmix_1.png" width="700">
+
+Monotonicity here, as far as I understand, is the fact that if I remove any agent from constraint the  $Q_{tot}$ function will necessarily or decrease or at list remain the same.
+
+
+Basically, QMIX is like VDN but is not constrained to linear dependencies between agents' Q values.
+QMIX also might use external state of the environment.
+The QMIX may represent monotonic value function but is unable to present non-monotonic payoff functions. Intuitively, any value function for which agent's best action depends on the action of any other agent at the same time step cannot be factorised appropriately by QMIX.
+An example for both types of functions:
+
+<img src="pics/qmix_4.png" width="700">
+
+
 
 ### QTRAN (2019)
 
-- Paper: [https://proceedings.mlr.press/v97/son19a/son19a.pdf](https://proceedings.mlr.press/v97/son19a/son19a.pdf)
+- Paper: [QTRAN: Learning to Factorize with Transformation for Cooperative Multi-Agent Reinforcement Learning](https://proceedings.mlr.press/v97/son19a/son19a.pdf)
+- Env: custom
 - Code: [https://github.com/himelbrand/marl-qtran](https://github.com/himelbrand/marl-qtran)
 
-Also value-based algorithm like VDN and QMix.
-VDN uses sum for the values, QMix uses monotonicity assumption.
-VDN and QMIX address only a fraction of factorizable MARL tasks due to their structural constraint in factorization such as additivity and monotonicity. 
-QTRAN is a new factorization method for MARL, which is free from such structural constraints and takes on a new approach to transforming the original joint action-value function into an easily factorizable one, with the same optimal actions. 
-QTRAN guarantees more general factorization than VDN or QMIX, thus covering a much wider class of MARL tasks than does previous methods.
+Also value-based algorithm like VDN and QMIX.
+VDN addresses linear correlation of $Q$ values, QMix assume monotonicity.
+Hence, VDN and QMIX address only a fraction of factorisable MARL tasks due to their structural constraint in factorization such as additivity and monotonicity. 
+QTRAN is a new factorization method for MARL, which is free from such structural constraints and takes on a new approach to transforming the original joint action-value function into an easily factorisable one, with the same optimal actions.
 
-One of the main big ideas here in QTRAN is that rather than directly factorizing Q function (VDN did it by sum and QMix did it by non-linear NN), the authors consider an alternative joint action-value
-function that is factorized by additive decomposition, but the Q function (and V function) itself is learned separately from the agents.
+The authors that to preserve the property described in the QMIX section:
 
-- very complex
-- have good theoretical properties
+<img src="pics/qmix_2.png" width="300">
+
+Also known as Individual-Global-Max (IGM) property.
+it is possible to construct factorization and to preserve _IGM_ with even less restrictive constraints. It is sufficient to make sure that the sum of optimal $Q_i$ functions is equal to the optimal $Q_{tot}$:
+
+<img src="pics/qtran_4.png" width="300">
 
 A toy example where QTRAN is better than VDN and QMix:
 
@@ -230,23 +297,37 @@ Pseudocode:
 
 <img src="pics/qtran_pseudocode.png" width="700">
 
+The algorithm is complex but has same nice theoretical properties.
+
+
+### MAVEN (2019)
+
+- Paper: [MAVEN: Multi-Agent Variational Exploration](https://proceedings.neurips.cc/paper/2019/file/f816dc0acface7498e10496222e9db10-Paper.pdf)
+- Env: [SMAC](https://github.com/oxwhirl/smac/tree/master)
+- Code: ~
+
+Though, I do not understand the full details of the approach, I try here t odescribe the general idea of the paper. MAVEN introduces additional tricks to QMIX that allows it to use some latent space to coordinate agents better and to align their choices. The overall schema is:
+<img src="pics/maven_2.png" width="700">
+
+Pseudo-code:
+
+<img src="pics/maven_1.png" width="700">
 
 ### DGN (2020)
 
-- Paper: [https://arxiv.org/pdf/1810.09202](https://arxiv.org/pdf/1810.09202)
+- Paper: [GRAPH CONVOLUTIONAL REINFORCEMENT LEARNING](https://arxiv.org/pdf/1810.09202)
+- Env: [MAgent2](https://magent2.farama.org/)
 - Code: [https://github.com/PKU-RL/DGN](https://github.com/PKU-RL/DGN)
 
 The main idea is to use the underlying connection graph of agents.
-No additional information about the state is not provided.
+No additional information about the state is provided.
 
-DGN consists of three types of modules: (1) observation encoder, (2) convolutional layer and (3) Q network, as illustrated in Figure 1 below. 
-The local observation $o^h_i$ is encoded into a feeture vector $h^{'t}_i$ by MLP for low-dimensional input or CNN for visual input. 
-The convolutional layer integrates the feature vectors in the local region (including node $i$ and its neighbors $B_i$) and generates the
-latent feature vector $h^{'t}_i$. 
-By stacking more convolutional layers, the receptive ﬁeld of an agent gradually grows, where more information is gathered, and thus the scope of cooperation can also increase.
+DGN consists of three types of modules:
+1. observation encoder - a simple MLP or CNN, depending on the input from an env.
+2. convolutional layer - attention heads that connect an agent with its neighbours
+3. Q network - concatenates everything into a single value per agent
 
-In the paper the experiments are done with the `MAgent` environments. 
-
+The local observation $o^h_i$ is encoded into a feature vector $h^{'t}_i$ by MLP for low-dimensional input or CNN for visual input. The convolutional layer integrates the feature vectors in the local region (including node $i$ and its neighbors $B_i$) and generates the latent feature vector $h^{'t}_i$. By stacking more convolutional layers, the receptive field of an agent gradually grows, where more information is gathered, and thus the scope of cooperation can also increase.
 The overview of three modules of DGN:
 
 <img src="pics/dgn.png" width="700">
@@ -259,40 +340,41 @@ Temporal relation regularization:
 
 <img src="pics/dgn3.png" width="700">
 
+The main trick here is the very construction of the NN arrangement which forces agents to cooperate only with their neighbour circle. And its changing adjacency matrices allows dynamic interaction when agents can move and change neighbours all the time.
+
 ### IPPO (2022)
 
-- Paper: [https://arxiv.org/pdf/2011.09533](https://arxiv.org/pdf/2011.09533)
-- Code:
+- Paper: [Is Independent Learning All You Need in the StarCraft Multi-Agent Challenge?](https://arxiv.org/pdf/2011.09533)
+- Env: [SMAC](https://github.com/oxwhirl/smac/tree/master)
+- Code: ~
 
-Each agent `a` learns a local observation based critic $V_φ(z^a_t )$ parameterised by $φ$ using Generalized Advantage Estimation (GAE).
+Each agent `a` learns a local observation based critic $V_φ(z^a_t)$ parameterised by $φ$ using Generalized Advantage Estimation (GAE).
 The network parameters $φ, θ$ are shared across critics, and actors, respectively.
-The authors also add an entropy regularization term to the ﬁnal policy loss.
+The authors also add an entropy regularization term to the final policy loss.
 For each agent, the overall learning loss becomes:
 
 <img src="pics/ippo_1.png" width="700">
 
 The architecture is three `conv1d` layers and two MLP layers.
 
-The algorithms outperforms QMIX and others on the SMAC env.
-It seems that IPPO's (approximate) surrogate objective might mitigate certain forms of environment non-stationarity that other independent learning algorithms are prone to, e.g., by suppressing updates catastrophic to performance.
+The algorithm outperforms QMIX and others on the SMAC env.
+It seems that IPPO's (approximate) surrogate objective might mitigate certain forms of environment non-stationary nature that other independent learning algorithms are prone to, e.g., by suppressing updates catastrophic to performance.
 
-In general, the idea is that IL is somehow surprisingly can be ok. The authors are unsure exactly why is that a case, probably because of the magic of the PPO's surrogate objective.
-
-In the paper, the authors used a very complicated language.
+> In general, the idea is that IL is somehow surprisingly can be ok. The authors are unsure exactly why is that a case, probably because of the magic of the PPO's surrogate objective. In the paper, the authors used a very complicated language.
 
 
 ### ROMA (2020)
 
 - Paper: [ROMA: Multi-Agent Reinforcement Learning with Emergent Roles](https://arxiv.org/pdf/2003.08039)
+- Env: [SMAC](https://github.com/oxwhirl/smac/tree/master)
 - Code: ~
 
 The paper introduces a concept of _role_ into MARL. 
 The idea is that this concept will allow to agents to specialize in their specific tasks and hence improve performance. The trick is that many agents have similar roles, so they can enjoy from mutual learning. But how to distinguish between different roles, so that non-related agent will not disturb others?
-The authors define three properties that are important for every role: (1) it needs to be dynamic to the changes of an env; (2) it needs to identiﬁable, i.e. to be temporary stable, so that the behaviour is consistent with time; (3) it needs to be specialized so that different robots can identify each other's roles and to be able to learn from agents with similar roles.
-So the ROMA works as follows (plus-minus): it encodes the trajectory into role, composes the loss for _identiﬁable_ property. Then, it computes the loss for _specialized_ property. Then, it uses the QMIX loss for the $Q_{tot}$. After the reword the gradients propagate back.
+The authors define three properties that are important for every role: (1) it needs to be dynamic to the changes of an env; (2) it needs to identifiable, i.e. to be temporary stable, so that the behaviour is consistent with time; (3) it needs to be specialized so that different robots can identify each other's roles and to be able to learn from agents with similar roles.
+So the ROMA works as follows (plus-minus): it encodes the trajectory into role, composes the loss for _identifiable_ property. Then, it computes the loss for _specialized_ property. Then, it uses the QMIX loss for the $Q_{tot}$. After the reword is generated the gradients propagate back.
 
-The method achieved SOTA results on the SMAC benchmark. That is good. But the disadvantage is that the method is relatively complicated. There are 5 learnable different NNs, the loss function is complex, and there are many parameters. 
-Maybe that is why ROMA is not used as a benchmark in the papers that came afterword.
+> The method achieved SOTA results on the SMAC benchmark. That is good. But the disadvantage is that the method is relatively complicated. There are 5 learnable different NNs, the loss function is complex, and there are many parameters. Maybe that is why ROMA is not used as a benchmark in the papers that came afterword.
 
 
 <img src="pics/roma_1.png" width="700">
@@ -396,14 +478,10 @@ Here is the general structure of Belief-PPO:
 <img src="pics/belief_ppo_1.png" width="700">
 
 
-### IDDPG
-
-- Paper: 
-- Code:
-
 ### SHAQ (2023)
 
 - Paper: [https://proceedings.neurips.cc/paper_files/paper/2022/file/27985d21f0b751b933d675930aa25022-Paper-Conference.pdf](https://proceedings.neurips.cc/paper_files/paper/2022/file/27985d21f0b751b933d675930aa25022-Paper-Conference.pdf)
+- Env: [SMAC](https://github.com/oxwhirl/smac/tree/master)
 - Code: [https://github.com/hsvgbkhgbv/shapley-q-learning](https://github.com/hsvgbkhgbv/shapley-q-learning)
 
 
