@@ -182,7 +182,7 @@ In [IQL (2015)](https://arxiv.org/abs/1511.08779) paper the authors show how by 
 ### VDN (2017)
 
 - Paper: [https://arxiv.org/pdf/1706.05296](https://arxiv.org/pdf/1706.05296)
-- Env: 
+- Env: ~
 - Code: ~
 - My code: [alg_VDN.py](algs_MARL/alg_VDN.py)
 
