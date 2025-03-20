@@ -3,6 +3,15 @@
 [//]: # (##########################################################)
 [//]: # (##########################################################)
 [//]: # (##########################################################)
+## RL Basics (Sutton & Barto) 
+
+### REINFORCE
+
+- Code: [PyTorch | REINFORCE, Actor-Critic Examples](https://github.com/pytorch/examples/tree/main/reinforcement_learning)
+
+[//]: # (##########################################################)
+[//]: # (##########################################################)
+[//]: # (##########################################################)
 ## RL Algorithms 
 
 ### Terms 
@@ -29,6 +38,19 @@ Gradient:
 Pseudo-code:
 
 <img src="pics/dqn1.png" width="700">
+
+### DPG (2014)
+
+- Paper:
+- Env:
+- Code: 
+
+### TRPO (2015)
+
+- Paper:
+- Env:
+- Code: 
+
 
 ### Double DQN (2016)
 
@@ -84,10 +106,6 @@ The great part of this new trick is that it naturally provides two following adv
 
 1. **The $V$ part is updated with every $Q$ update in the dueling schema, unlike previous approaches:** "The dueling architecture has an ability to learn the state-value function efﬁciently. With every update of the Q values in the dueling architecture, the value stream $V$ is updated – this contrasts with the updates in a single-stream architecture where only the value of one actions is updated, the values for all other actions remain untouched. This more frequent updating of the value stream allocates more resources to $V$, and thus allows for better approximation of the state values, which need to be accurate for temporal-difference-based methods like $Q$-learning to work (Sutton & Barto, 1998). This phenomenon is reﬂected in the experiments, where the advantage of the dueling architecture over single-stream $Q$ networks grows when the number of actions is large."
 2. **Dueling separation helps to distinguish between small differences in action values:** "The differences between $Q$-values for a given state are often very small relative to the magnitude of $Q$. For example, after training with DDQN on the game of Seaquest, the average action gap (the gap between the Q values of the best and the second best action in a given state) across visited states is roughly 0.04, whereas the average state value across those states is about 15. This difference in scale means that small amount of noise in the updates could reorder the actions, and thus making the nearly greedy policy switch abruptly. The dueling architecture with its separate advantage stream is robust to such effects."
-
-### REINFORCE
-
-- Code: [PyTorch | REINFORCE, Actor-Critic Examples](https://github.com/pytorch/examples/tree/main/reinforcement_learning)
 
 ### Actor-Critic (2016)
 
@@ -174,6 +192,13 @@ The nature of bad actions and good action is not the same. These are fundamental
 - **be cautious on good actions**: limiting how much you amplify good actions avoids premature convergence (overfitting) and maintains a healthier level of exploration
 
 This insight is quite striking, because it resembles us and animals and how we approach learning. Kalman and Tversky also discovered that humans treat $x$ units of loss much stronger than the same $x$ units of happiness.
+
+
+### HER (2017)
+
+- Paper:
+- Env:
+- Code: 
 
 ### TD3 (2018)
 
