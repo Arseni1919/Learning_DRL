@@ -8,11 +8,19 @@
 ### Terms 
 
 - `credit assignment problem` - This problem is a key source of difficulty in RL that is the long time delay between actions and their positive or negative effect on rewards
+- `bootstrapping` - updating the value estimate for a state from the estimated values of subsequent states
 
 ### DQN (2013)
 
 - Paper: [Playing Atari with Deep Reinforcement Learning](https://arxiv.org/pdf/1312.05602)
+- Env: Atari
 - Code: [PyTorch | DQN](https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html)
+
+DQN is the first paper that successfully adapted NN to the RL case. They are motivated by the problem of adapting NN directly on the RL tasks. Simple supervised learning is really hard for such tasks. On the other hand, it is not trivial to adapt the NN for RL algorithms as well.
+To merge Q-learning together with NN into a single algorithm, the authors used two main novel ideas:
+
+- **replay buffer**: NN love uncorrelated diverse data, and replay buffer satisfies the divergent representation of experience.
+- **target $Q$ network**: the updates of $Q$ function are far more stable if the $y$ component does not change during the update. So it is better to introduce additional target $Q$ network that copies its weights to the original $Q$ network once in a while.
 
 Gradient:
 
@@ -25,7 +33,34 @@ Pseudo-code:
 ### Double DQN (2016)
 
 - Paper: [Deep Reinforcement Learning with Double Q-Learning](https://ojs.aaai.org/index.php/AAAI/article/view/10295)
+- Env: 
 - Code: ~
+
+The problem this paper solves is the overestimation of action values in DQN.
+The phenomenon is known as _maximisation bias_. A visual toy example:
+
+<img src="pics/double_3.png" width="500">
+
+Overestimation of some states by itself maybe not a problem, and even it sometimes helps for exploration. But if the higher values are not well distributed between actions of higher values are on those actions that we do not need to explore anymore - that is a problem.
+There is a proof of theorem that, in DQN, sets the lower bound for the optimal $Q$ value estimation that is strictly bigger than optimal $V$ value of the state. THey are supposed to be equal, btw.
+
+Double DQN replaces target $Y$ of DQN:
+
+<img src="pics/double_1.png" width="500">
+
+with the following target $Y$:
+
+<img src="pics/double_2.png" width="500">
+
+The idea behind the Double Q trick is very simple and elegant and it is a play of estimates:
+
+$E[max_a(Q)] \neq E[Q]$ - biased
+
+but
+
+$E[Q(argmax_aQ'(a))] = E[Q]$ - unbiased
+
+
 
 ### Dueling DQN (2016)
 
@@ -52,14 +87,22 @@ The great part of this new trick is that it naturally provides two following adv
 
 ### REINFORCE
 
-- Explanation: [PyTorch | REINFORCE, Actor-Critic Examples](https://github.com/pytorch/examples/tree/main/reinforcement_learning)
+- Code: [PyTorch | REINFORCE, Actor-Critic Examples](https://github.com/pytorch/examples/tree/main/reinforcement_learning)
 
 ### Actor-Critic (2016)
 
 - Paper: [Asynchronous Methods for Deep Reinforcement Learning](https://proceedings.mlr.press/v48/mniha16.pdf)
 - Code: [PyTorch | REINFORCE, Actor-Critic Examples](https://github.com/pytorch/examples/tree/main/reinforcement_learning)
 
-Pseudo-code:
+
+Although REINFORCE algorithm may use $V$ as a baseline, it is not considered to be the _actor-critic_ algorithm, because its $V$ is used as a baseline and not used for bootstrapping (updating the value estimate for a state from the estimated values of subsequent states).
+This change accelerates learning drastically.
+So the core idea is that the actor-critic methods incorporate $V$ function into the estimation of values states themselves.
+The simplest example from the Sutton's book:
+
+<img src="pics/ac_1.png" width="700">
+
+The full pseudo-code with the use of NNs:
 
 <img src="pics/valina_policy_gradient.png" width="700">
 
@@ -67,9 +110,19 @@ Pseudo-code:
 ### DDPG (2016)
 
 - Paper: [CONTINUOUS CONTROL WITH DEEP REINFORCEMENT LEARNING](https://arxiv.org/pdf/1509.02971)
+- Env: Mujoco
 - Code: [Medium | DDPG](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
 
-Pseudo-code:
+The core idea of the paper is to adapt actor-critic method to the _continuous action domain_.
+It is impossible to naively adapt the discrete approaches because of the _curse of dimensionality_ issue.
+The contribution of the paper is to adapt nice theoretically robust DPG algorithm to work with NNs and to be able to tackle much complex problems.
+The tricks are:
+- **use replay buffer**: as in DQN to break the correlation between subsequent states and stabilise NN learning
+- **usage of a target $Q$ function with soft updates**: also similar to the DQN trick. Here, though,  the soft update is a novelty that is well adapted by other subsequent algorithms.
+- **batch normalisation**: here the problem that the batch normalisation solves is to force the feature from the environment to be at the same range/scale. It is hard to NN to learn when one feature jumps from minus million to plus million and other feature is between $[-1, 1]$. Let's convert all to be inside the same range of numbers +-.
+- **exploration policy**: DDPG is an off-policy algorithm, so it is really easy to add exploration to the execution policy. The authors use some kind of noise that they add the to action sampling process.
+
+The full pseudo-code:
 
 <img src="pics/ddpg_v2.png" width="700">
 
@@ -93,17 +146,40 @@ The usage of GAE is primarily in policy optimization algorithms (PPO, TRPO, etc.
 ### PPO (2017)
 
 - Paper: [Proximal Policy Optimization Algorithms](https://arxiv.org/pdf/1707.06347)
+- Env: Mujoco
 - Code: [colab | PPO](https://colab.research.google.com/github/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_colab.ipynb)
+
+Basically, PPO is a simplified version of the TRPO algorithm that is much easier to implement.
+
+The most important formula is the _surrogate_ objective of PPO:
+
+<img src="pics/ppo_1.png" width="700">
+
+The final objective is a **lower bound** of the unclipped objective:
+- if the value is very low, it will take $-rA$
+- if the value is slightly low (less than $1 - \epsilon$), it will take $-(1 - \epsilon)A$
+- if the value is slightly positive, it will take the original $+rA$
+- if the value is much positive (greater than $1 + \epsilon$), it will take $+(1 + \epsilon)A$
 
 Pseudo-code:
 
-<img src="pics/ppo.png" width="700">
+<img src="pics/ppo_2.png" width="700">
+
+In the paper, they compared different variations of surrogate functions but found that the aforementioned is the best one.
+Unfortunately, no discussion about why this choice of objective is logical provided in the paper.
+Fortunately, we have ChatGPT, and I talked a bit with it about the topic. The following important intuition is emerged..
+
+The nature of bad actions and good action is not the same. These are fundamentally different and the asymmetry to dealing with bad and good actions is required.
+- **be harsh on bad actions**: aggressively cutting bad actions quickly removes harmful choices and does not risk loosing anything valuable
+- **be cautious on good actions**: limiting how much you amplify good actions avoids premature convergence (overfitting) and maintains a healthier level of exploration
+
+This insight is quite striking, because it resembles us and animals and how we approach learning. Kalman and Tversky also discovered that humans treat $x$ units of loss much stronger than the same $x$ units of happiness.
 
 ### TD3 (2018)
 
 - Paper: [Addressing Function Approximation Error in Actor-Critic Methods](https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf)
-- Code: 
-  - [Medium | TD3](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
+- Env: ~
+- Code: [Medium | TD3](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
 
 Pseudo-code:
 
