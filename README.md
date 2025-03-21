@@ -203,12 +203,58 @@ This insight is quite striking, because it resembles us and animals and how we a
 ### TD3 (2018)
 
 - Paper: [Addressing Function Approximation Error in Actor-Critic Methods](https://proceedings.mlr.press/v80/fujimoto18a/fujimoto18a.pdf)
-- Env: ~
-- Code: [Medium | TD3](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
+- Env: Mujoco
+- Code: 
+  - [github | original implementation](https://github.com/sfujim/TD3)
+  - [Medium | TD3](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
+
+The authors point out the problem of value overestimation bias (like in Double DQN) but for continuous actions.
+A naive adaptation of Double Q-learning ((1) to use target function as the second function or (2) to train the whole separate Q function in parallel) does not work due to slow-changing policy in an actor-critic setting. The target and current policy are too similar to each other. If we chose to train two q functions in parallel, there is too much noise in the actor-critic setting that still brings the bias back.
+
+The authors propose _Twin Delayed Deep Deterministic policy gradient algorithm (TD3)_.
+They prove why overestimation bias in Actor-Critic exists. I will elabore the proof here, because it is simple and nice to understand.
+The authors show that when using deterministic policy gradient, even if there is no bias in the estimations, the overestimation still will occur. Note, **the gradient direction is a local maximizer**.
+
+First, logical to assume that an approximate policy tuned for its Q function will get higher values than even the perfect policy:
+
+$$ E[Q_{\theta}(s, \pi_{approx}(s))] \geq E[Q_{\theta}(s, \pi_{true}(s))] $$
+
+Of course, the true Q values of the tru function are greater than the approximate one:
+
+$$ E[Q^{\pi}(s, \pi_{true}(s))] \geq E[Q^{\pi}(s, \pi_{approx}(s))] $$
+
+Because of the maximization operation (gradient direction), so the approximate critic will give higher values to the true policy than the tru critic:
+
+$$ E[Q_{\theta}(s, \pi_{true}(s))] \geq E[Q^{\pi}(s, \pi_{true}(s))] $$
+
+So, that means the overestimation is inevitable. Combining three inequalities we get:
+
+$$ E[Q_{\theta}(s, \pi_{approx}(s))]  \geq E[Q^{\pi}(s, \pi_{approx}(s))]. \square$$
+
+The authors solve the bias problem with the following target update of the Clipped Double Q-learning algorithm:
+
+<img src="pics/td3_1.png" width="400">
+
+- The idea is that even if values are underestimated they will not propagate through NN like the overestimated values.
+- Minimum operator prefers states with lower variance. Less variance, less differences between two Q functions.
+
+The authors reduce variance also by slowly updating the policy: $\theta' = \tau \theta + (1 - \tau)\theta'$.
+
+To prevent overfitting of policy, the authors add a random noice to the action selection:
+
+$$ a \leftarrow \pi_{\phi}(s) + \epsilon, \: \epsilon \sim clip(N(0, \sigma), -c, c) $$
 
 Pseudo-code:
 
 <img src="pics/td3_v2.png" width="700">
+
+In short, they took DDPG and:
+- Added a new critic NN
+- Introduced the minimum operator to the target calculation
+- Made updates smoother
+- Added noise to the action selection process
+
+And by that got SOTA results.
 
 
 ### SAC (2018)
