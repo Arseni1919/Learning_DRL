@@ -569,6 +569,8 @@ The idea is simple. Just run independent RL agents in some environments.
 The main problem: nonstationarity of the world that is dependent on actions of other agents. Surprisingly, in some cases IQL works great (e.g. ping-pong env). 
 In [IQL (2015)](https://arxiv.org/abs/1511.08779) paper the authors show how by playing with the reward definitions the behaviour of agents change from cooperative to competitive.
 
+> Run separate DQN agents.
+
 
 ### VDN (2017)
 
@@ -590,6 +592,7 @@ Basic architecture:
 
 <img src="pics/vdn_basic_arc.png" width="700">
 
+> Use additive common $Q$ function to efficiently decompose individual q values.
 
 ### IAC and COMA (2018)
 
@@ -617,7 +620,7 @@ One of the baseline algorithms they used is Independent Actor-Critic (IAC) algor
 COMA can also use external state of the environment in the learning stage.
 Other papers, such as QMIX paper, say that COMA scales purly with the number of agents and learns slowly.
 
-
+> Use relative advantage of your action to learn agent's NNs.
 
 ### QMIX (2018)
 
@@ -654,7 +657,7 @@ An example for both types of functions:
 
 <img src="pics/qmix_4.png" width="700">
 
-
+> If the rewards are monotonic, every new agent only adds the value, then QMIX works well.
 
 ### QTRAN (2019)
 
@@ -690,6 +693,7 @@ Pseudocode:
 
 The algorithm is complex but has same nice theoretical properties.
 
+> It is enough to preserve IGM property to learn efficiently policies.
 
 ### MAVEN (2019)
 
@@ -697,12 +701,14 @@ The algorithm is complex but has same nice theoretical properties.
 - Env: [SMAC](https://github.com/oxwhirl/smac/tree/master)
 - Code: ~
 
-Though, I do not understand the full details of the approach, I try here t odescribe the general idea of the paper. MAVEN introduces additional tricks to QMIX that allows it to use some latent space to coordinate agents better and to align their choices. The overall schema is:
+Though, I do not understand the full details of the approach, I try here to describe the general idea of the paper. MAVEN introduces additional tricks to QMIX that allows it to use some latent space to coordinate agents better and to align their choices. The overall schema is:
 <img src="pics/maven_2.png" width="700">
 
 Pseudo-code:
 
 <img src="pics/maven_1.png" width="700">
+
+> Use latent space for more coordination in QMIX.
 
 ### DGN (2020)
 
@@ -732,6 +738,8 @@ Temporal relation regularization:
 <img src="pics/dgn3.png" width="700">
 
 The main trick here is the very construction of the NN arrangement which forces agents to cooperate only with their neighbour circle. And its changing adjacency matrices allows dynamic interaction when agents can move and change neighbours all the time.
+
+> A nice novel idea: use convolutional networks to coordinate learning between agents.
 
 ### IPPO (2022)
 
@@ -765,10 +773,13 @@ The idea is that this concept will allow to agents to specialize in their specif
 The authors define three properties that are important for every role: (1) it needs to be dynamic to the changes of an env; (2) it needs to identifiable, i.e. to be temporary stable, so that the behaviour is consistent with time; (3) it needs to be specialized so that different robots can identify each other's roles and to be able to learn from agents with similar roles.
 So the ROMA works as follows (plus-minus): it encodes the trajectory into role, composes the loss for _identifiable_ property. Then, it computes the loss for _specialized_ property. Then, it uses the QMIX loss for the $Q_{tot}$. After the reword is generated the gradients propagate back.
 
-> The method achieved SOTA results on the SMAC benchmark. That is good. But the disadvantage is that the method is relatively complicated. There are 5 learnable different NNs, the loss function is complex, and there are many parameters. Maybe that is why ROMA is not used as a benchmark in the papers that came afterword.
-
-
 <img src="pics/roma_1.png" width="700">
+
+The method achieved SOTA results on the SMAC benchmark.
+The disadvantage is that the method is relatively complicated. There are 5 learnable different NNs, the loss function is complex, and there are many parameters. Maybe that is why ROMA is not used as a benchmark in the papers that came afterword.
+
+> ROMA uses latent spaces to learn "roles" for agents.
+
 
 ### MADDPG (2020)
 
@@ -791,6 +802,8 @@ The pseudo-code of MADDPG is as follows:
 
 The paper presented no theoretical guarantees.
 A really well-written paper, I should say.
+
+> Take DDPG and use separate Q networks for every agent. But every such network accesses info from other agents. This way it preserves stationary property.
 
 ### Qatten (2020)
 
@@ -815,6 +828,8 @@ An the overall algorithm schema is presented here:
 The achieved SOTA results at the time. They used multi-head attention as the ultimate approximator for the $\lambda$ values, referring to this paper: ["ARE TRANSFORMERS UNIVERSAL APPROXIMATORS OF SEQUENCE-TO-SEQUENCE FUNCTIONS?" (ICLR, 2020)](https://arxiv.org/pdf/1912.10077).
 The details of the formulas are hard to track, unfortunately.
 
+> Factorisation can be done per state - that is even more general formulation of factorisation compared to VDN, QMIX, and QTRAN.
+
 
 ### QPlex (2021)
 
@@ -824,6 +839,7 @@ The details of the formulas are hard to track, unfortunately.
 
 This paper defines advantage-based IGM (_individual global max_) principle and bridges it with the original IGM principle. This principle was used by previous algorithms such as VDN, QMIX, and QTRAN. There, they said that the combination of individual $Q$ values compose the total $Q$ value. So, in this paper, the authors declare that it is more beneficial to look at the advantage values $A$ instead of $Q$ values. The inspiration is taken from the "Dueling DQN" paper (explained earlier).
 Not only that, the paper also took inspiration from "Qatten" paper to combine the $A$ values in a cleaver manner.
+
 The overall flow of the algorithm is here: 
 
 <img src="pics/qplex_1.png" width="700">
@@ -831,6 +847,8 @@ The overall flow of the algorithm is here:
 The bad news, once again as in "Qatten" paper, the approach is complex and it is hard to fully understand the theoretical strength of the paper.
 
 They took the smart combination of $Q$ values from "Qatten" paper, attention mechanism, duelling trick from the "Dueling DQN" paper and smashed it all together on top of the MARL problem and it worked.
+
+> Now take the Qatten and Duelling Q-learning and merge two ideas. QPlex factorises advantage values.
 
 ### MAPPO (2022)
 
@@ -853,6 +871,8 @@ The pseudo-code from the paper:
 
 <img src="pics/mappo_1.png" width="700">
 
+> Take PPO, make a centrilised $Q$ function and use some tricks to get the result.
+
 
 
 ### Belief-PPO (2023)
@@ -867,6 +887,8 @@ Once again, the problem, imo, is that the approach, though achieves SOTA results
 Here is the general structure of Belief-PPO:
 
 <img src="pics/belief_ppo_1.png" width="700">
+
+> If you fully decentralised, build beliefs about agents around you.
 
 
 ### SHAQ (2023)
@@ -909,6 +931,8 @@ Pseudo-code:
 <img src="pics/shaq_2.png" width="700">
 
 As you can see the implementation is also not so simple. At list, they have code to play with in GitHub.
+
+> Take a Shapley value from game theory and use it in MARL.
 
 ---
 
