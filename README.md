@@ -1,3 +1,5 @@
+<img src="pics/bg_1.png" width="900">
+
 # Learning Deep Reinforcement Learning (DRL) and Multi-Agent DRL
 
 Reinforcement Learning (RL) is a fascinating topic that captures my imagination every single time I work on it. In this repo, I try to summarise the most basic principles, ideas, and algorithms of RL and Multi-agent RL. Of course, it is impossible to mention all important steps of the development of the field. For further research I attach links to other sources that will help you with the journey. 
@@ -134,7 +136,7 @@ That is, it is not used for bootstrapping - updating the value estimate for a st
 
 And here is the example for actor-critic from the book:
 
-<img src="pics/rl_16.png" width="700">
+<img src="pics/rl_17.png" width="700">
 
 
 
@@ -384,13 +386,6 @@ The nature of bad actions and good action is not the same. These are fundamental
 This insight is quite striking, because it resembles us and animals and how we approach learning. Kalman and Tversky also discovered that humans treat $x$ units of loss much stronger than the same $x$ units of happiness.
 
 > On policy algorithm that is harsh on bad actions but is cautions with good ones. One of the best existing approaches as of by now.
-
-
-### HER (2017)
-
-- Paper:
-- Env:
-- Code: 
 
 ### TD3 (2018)
 
