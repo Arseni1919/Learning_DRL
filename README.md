@@ -155,6 +155,7 @@ And here is the example for actor-critic from the book:
 - Code: [PyTorch | DQN](https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html)
 
 DQN is the first paper that successfully adapted NN to the RL case. They are motivated by the problem of adapting NN directly on the RL tasks. Simple supervised learning is really hard for such tasks. On the other hand, it is not trivial to adapt the NN for RL algorithms as well.
+Especially, it is known to be challenging to merge off-policy TD algorithms with function approximations - the deadly triad. But... DQN made it and overcame the triad.
 To merge Q-learning together with NN into a single algorithm, the authors used two main novel ideas:
 
 - **replay buffer**: NN love uncorrelated diverse data, and replay buffer satisfies the divergent representation of experience.
@@ -167,6 +168,8 @@ Gradient:
 Pseudo-code:
 
 <img src="pics/dqn1.png" width="700">
+
+> Replay Buffer and Target Q network stabilize NNs inside off-policy methods and with that we can use NNs to solve RL tasks.
 
 ### DPG (2014)
 
@@ -201,6 +204,7 @@ SPG:
 - naturally explores action space
 - better suited for environments where diverse actions are critical
 
+> It is possible to get gradient from deterministic policy.
 
 
 ### TRPO (2015)
@@ -225,12 +229,13 @@ Discussion in [OpenAI | PPO](https://spinningup.openai.com/en/latest/algorithms/
 Pseudo-code: 
 <img src="pics/trpo_1.png" width="700">
 
+> Do the write step size with the wright constraints on it for policy improvement in on-policy methods, and it will work great.
 
 
 ### Double DQN (2016)
 
 - Paper: [Deep Reinforcement Learning with Double Q-Learning](https://ojs.aaai.org/index.php/AAAI/article/view/10295)
-- Env: 
+- Env: ~
 - Code: ~
 
 The problem this paper solves is the overestimation of action values in DQN.
@@ -257,6 +262,8 @@ but
 
 $E[Q(argmax_aQ'(a))] = E[Q]$ - unbiased
 
+> Value overestimation is bad. Use two $Q$ functions to avoid the bias.
+
 
 
 ### Dueling DQN (2016)
@@ -282,6 +289,8 @@ The great part of this new trick is that it naturally provides two following adv
 1. **The $V$ part is updated with every $Q$ update in the dueling schema, unlike previous approaches:** "The dueling architecture has an ability to learn the state-value function efﬁciently. With every update of the Q values in the dueling architecture, the value stream $V$ is updated – this contrasts with the updates in a single-stream architecture where only the value of one actions is updated, the values for all other actions remain untouched. This more frequent updating of the value stream allocates more resources to $V$, and thus allows for better approximation of the state values, which need to be accurate for temporal-difference-based methods like $Q$-learning to work (Sutton & Barto, 1998). This phenomenon is reﬂected in the experiments, where the advantage of the dueling architecture over single-stream $Q$ networks grows when the number of actions is large."
 2. **Dueling separation helps to distinguish between small differences in action values:** "The differences between $Q$-values for a given state are often very small relative to the magnitude of $Q$. For example, after training with DDQN on the game of Seaquest, the average action gap (the gap between the Q values of the best and the second best action in a given state) across visited states is roughly 0.04, whereas the average state value across those states is about 15. This difference in scale means that small amount of noise in the updates could reorder the actions, and thus making the nearly greedy policy switch abruptly. The dueling architecture with its separate advantage stream is robust to such effects."
 
+> There are two separable parts of every $Q$ function: value and advantage. The paper use cleaver and simple trick to utilize that separation for speeding up learning without loosing any memory or compute.
+
 ### Actor-Critic (2016)
 
 - Paper: [Asynchronous Methods for Deep Reinforcement Learning](https://proceedings.mlr.press/v48/mniha16.pdf)
@@ -298,6 +307,8 @@ The simplest example from the Sutton's book:
 The full pseudo-code with the use of NNs:
 
 <img src="pics/valina_policy_gradient.png" width="700">
+
+> Policy gradient methods are great. They even better when we use bootstrap and $V$ state-value functions as a baseline. Here is the algorithm that uses NN in the approach as well.
 
 
 ### DDPG (2016)
@@ -319,6 +330,8 @@ The full pseudo-code:
 
 <img src="pics/ddpg_v2.png" width="700">
 
+> Several nice tricks to adapt NNs for the DPG algorithm such as: replay buffer, target $Q$ nets, batch normalisation, and exploration policy.
+
 ### GAE (2016)
 
 - Paper: [HIGH-DIMENSIONAL CONTINUOUS CONTROL USING GENERALIZED ADVANTAGE ESTIMATION](https://arxiv.org/pdf/1506.02438)
@@ -335,6 +348,8 @@ Here is the formulation of GAE:
 <img src="pics/gae_3.png" width="700">
 
 The usage of GAE is primarily in policy optimization algorithms (PPO, TRPO, etc.) to reduce variance without adding to much bias.
+
+> Like eligibility traces but for the advantage function.
 
 ### PPO (2017)
 
@@ -367,6 +382,8 @@ The nature of bad actions and good action is not the same. These are fundamental
 - **be cautious on good actions**: limiting how much you amplify good actions avoids premature convergence (overfitting) and maintains a healthier level of exploration
 
 This insight is quite striking, because it resembles us and animals and how we approach learning. Kalman and Tversky also discovered that humans treat $x$ units of loss much stronger than the same $x$ units of happiness.
+
+> On policy algorithm that is harsh on bad actions but is cautions with good ones. One of the best existing approaches as of by now.
 
 
 ### HER (2017)
@@ -432,6 +449,8 @@ In short, they took DDPG and:
 
 And by that got SOTA results.
 
+> DDPG without overestimation bias.
+
 
 ### SAC (2018)
 
@@ -491,6 +510,8 @@ So, SAC:
 - Uses an actor-critic setting
 - Utilises deterministic policy gradient (DPG) update through $Q$ function
 
+> An off-policy algorithm. Takes TD3 and introduces the entropy term inside the objective for better exploration.
+
 
 ### DreamerV3 (2023)
 
@@ -513,7 +534,9 @@ THe overall schema of DreamerV3:
 
 <img src="pics/dreamerv3_1.png" width="700">
 
-> A perfect example for a paper that has a highly complex algorithm, but described lightly. After reading the paper you actually ending up with a feeling that you are smart and not stupid. And the code is open.
+A perfect example for a paper that has a highly complex algorithm, but described lightly. After reading the paper you actually ending up with a feeling that you are smart and not stupid. And the code is open.
+
+> A model-based algorithm that tries to solve a lot of different environments.
 
 
 ### RL Algorithms Interconnections
