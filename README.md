@@ -1,6 +1,6 @@
 # Learning Deep Reinforcement Learning (DRL) and Multi-Agent DRL
 
-Reinforcement Learning (RL) is a fascinating topic that captures my imagination every single time I work on it. In this repo, I try to summarise the most basic principles, ideas, and algorithms of RL and Multi-agent RL. Of course, it is impossible to mention all important steps of the development of the field. For further research I attach links to other sources that will help you with the journey. 
+Reinforcement Learning (RL) is a fascinating topic that captures my imagination every single time I work on it. In this repo, I try to summarise the most basic principles, ideas, and algorithms of RL and Multi-agent RL. Of course, it is impossible to mention all important steps of the development of the field. For further research I attach links to other sources that will help you with the journey. q
 
 [//]: # (##########################################################)
 [//]: # (##########################################################)
