@@ -951,7 +951,7 @@ As you can see the implementation is also not so simple. At list, they have code
 [//]: # (##########################################################)
 <img src="pics/bg_4.png" width="900">
 
-## Environments
+## Environments & Frameworks
 
 ### MAgent2
 
@@ -1087,6 +1087,26 @@ def main():
 if __name__ == '__main__':
     main()
 ```
+
+### BenchMAR
+
+[BenchMARL](https://benchmarl.readthedocs.io/en/latest/index.html)
+
+### MARLlib
+
+[MARLlib: A Multi-agent Reinforcement Learning Library](https://marllib.readthedocs.io/en/latest/index.html)
+
+### JaxMARL
+
+[JaxMARL](https://jaxmarl.foersterlab.com/)
+
+### RLlib
+
+[RLlib: Industry-Grade, Scalable Reinforcement Learning](https://docs.ray.io/en/latest/rllib/index.html)
+
+### Stable-Baselines3
+
+[Stable-Baselines3](https://stable-baselines3.readthedocs.io/en/master/index.html)
 
 
 [//]: # (##########################################################)
