@@ -1,13 +1,127 @@
 # Learning Deep Reinforcement Learning (DRL) and Multi-Agent DRL
 
-[//]: # (##########################################################)
-[//]: # (##########################################################)
-[//]: # (##########################################################)
-## RL Basics (Sutton & Barto) 
+Reinforcement Learning (RL) is a fascinating topic that captures my imagination every single time I work on it. In this repo, I try to summarise the most basic principles, ideas, and algorithms of RL and Multi-agent RL. Of course, it is impossible to mention all important steps of the development of the field. For further research I attach links to other sources that will help you with the journey.
 
-### REINFORCE
+[//]: # (##########################################################)
+[//]: # (##########################################################)
+[//]: # (##########################################################)
+## Reinforcement Learning Basics (Sutton & Barto RL Book and Other Sources) 
+
+- Book: ["Reinforcement Learning: An Introduction" Richard S. Sutton and Andrew G. Barto](https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf)
+
+
+### Mutli-armed Bandits 
+
+The Mutli-armed Bandits (MAB) problem is a simplified RL problem that is stateless. Through MAB, it is easier to illustrate some basic RL principles such as exploration-exploitation principle, Reward function, etc.
+
+Incremental formula to update average reward:
+
+<img src="pics/rl_1.png" width="700">
+
+In general the updates in RL are mostly of the form:
+
+$$NewEstimate \leftarrow OldEstimate + StepSize [ Target - OldEstimate ] $$
+
+
+### Dynamic Programming
+
+Dynamic Programming (DP) provides an essential foundation for the RL methods as those methods attempt to achive much the same effect as DP only with less computation and without assuming a perfect model of the env. Two most popular DP methods are Policy Iteration and Value Iteration are shown further.
+
+Policy Iteration:
+
+<img src="pics/rl_2.png" width="700">
+
+Value Iteration:
+
+<img src="pics/rl_3.png" width="700">
+
+_Generalized Policy Iteration_ is a general idea of exchanging processes of policy evaluation and policy improvement to reach the best policy eventually:
+
+<img src="pics/rl_4.png" width="700">
+
+
+### Monte Carlo Methods
+
+Here we do not assume any knowledge about the world model. Pure experience-based learning. I will show here some Monte Carlo (MC) control algorithms as well.
+
+Example 1:
+
+<img src="pics/rl_5.png" width="700">
+
+Example 2:
+
+<img src="pics/rl_6.png" width="700">
+
+In this chapter the authors introduced the principle of _Importance Sampling_.
+
+$$ E_{\pi}[Tr] = \sum_{i}\pi(i) \cdot Tr(i) = \sum_{i}b(i) \cdot \frac{\pi(i)}{b(i)} \cdot Tr(i) = E_{b}[\frac{\pi}{b}Tr] $$
+
+### Temporal Difference Learning
+
+This is a central and novel idea that RL introduces to the world - Temporal-Difference (TD) learning.
+In TD-learning the algorithms use the estimation of subsequent states in order to evaluate current state - they bootstrap.
+
+Sarsa Algorithm:
+
+<img src="pics/rl_7.png" width="700">
+
+Q-learning Algorithm:
+
+<img src="pics/rl_8.png" width="700">
+
+Double Q-learning Algorithm:
+
+<img src="pics/rl_9.png" width="700">
+
+_$n$-step Bootstrapping_ algorithm example:
+
+<img src="pics/rl_10.png" width="700">
+
+Model-based tabular algorithm example:
+
+<img src="pics/rl_11.png" width="700">
+
+### Dimensions
+
+<img src="pics/rl_12.png" width="700">
+
+### RL with Approximation
+
+One of the key differences of approximation functions from tabular methods is that here, when a singe state is updated, the change generalises from that state affect the values of many other states.
+Another interesting fact is that here there are no states that will be visited twice, i.e. all states are unique. Si we need to generalise efficiently in order to find good policy.
+Because of this generalisation issue the learning eventually may become faster than in tabular methods, oncw again each state-update changes the values of numerous other states.
+
+Example:
+
+<img src="pics/rl_13.png" width="700">
+
+
+### Policy Gradient Methods
 
 - Code: [PyTorch | REINFORCE, Actor-Critic Examples](https://github.com/pytorch/examples/tree/main/reinforcement_learning)
+
+A totally new approach at the time. Several advantages to the PG methods:
+- can represent deterministic policies if needed
+- can find stochastic policies
+- simpler to approximate
+- learn better policies and faster
+- prior knowledge can be injected
+
+**Policy Gradient Theorem**
+
+<img src="pics/rl_14.png" width="700">
+
+Based on the theorem the basic REINFORCE algorithm was developed.
+HEre the algorithm uses value function as a baseline for reducing variance during the training:
+
+<img src="pics/rl_15.png" width="700">
+
+Although  the REINFORCE method can use value function as a baseline we do not consider it to be _actor-critic_, because its state-value function is used only as a baseline, not as a critic.
+THat is, it is not used for bootstrapping - updating the value estimate for a state from the estimated values of subsequent states.
+
+<img src="pics/rl_16.png" width="700">
+
+
 
 [//]: # (##########################################################)
 [//]: # (##########################################################)
@@ -41,15 +155,61 @@ Pseudo-code:
 
 ### DPG (2014)
 
-- Paper:
-- Env:
-- Code: 
+- Paper: [Deterministic Policy Gradient Algorithms](https://proceedings.mlr.press/v32/silver14.pdf)
+- Env: envs with continuous actions
+- Code: ~
+
+DPG works with deterministic policies. It is an off-policy actor-critic algorithm. It is off-policy because we need some other exploratory policy to explore and teach our target deterministic policy.
+The paper proves the deterministic policy theorem that claims, it is possible to get the gradient of deterministic policy (DPG) without knowing the state dynamics. It is similar to the stochastic policy gradient (SPG) theorem.
+
+- DPG is a limiting case of SPG when the variance in the stochastic policy approaches 0.
+- SPG integrates both over state and action spaces
+
+<img src="pics/dpg_1.png" width="700">
+
+- DPG integrates only over state spaces
+
+<img src="pics/dpg_2.png" width="700">
+
+Hence, the update rule in DPG is:
+
+<img src="pics/dpg_3.png" width="700">
+
+
+**Comparison of DPG with SPG**
+
+DPG:
+- requires fewer samples in high-dimensional action spaces
+- lower variance
+
+SPG:
+- naturally explores action space
+- better suited for environments where diverse actions are critical
+
+
 
 ### TRPO (2015)
 
-- Paper:
-- Env:
-- Code: 
+- Paper & Sources: 
+  - [Trust Region Policy Optimization](https://arxiv.org/pdf/1502.05477)
+  - [OpenAI | TRPO](https://spinningup.openai.com/en/latest/algorithms/trpo.html)
+- Env: ~
+- Code: ~
+
+Unfortunately, the paper is very complicated and requires some prior knowledge to fully understand the details of findings.
+In general, the idea is that there is an algorithm that is guaranteed to improve with each step if the step-size is chosen wisely.
+It takes maximum step as long as the KL divergence between the old policy and a new one is under a predefined parameter $\delta$.
+
+A more nice short explanation can be found here: [OpenAI | TRPO](https://spinningup.openai.com/en/latest/algorithms/trpo.html).
+The citation from the source is the following:
+"TRPO updates policies by taking the largest step possible to improve performance, while satisfying a special constraint on how close the new and old policies are allowed to be. The constraint is expressed in terms of KL-Divergence, a measure of (something like, but not exactly) distance between probability distributions."
+
+Discussion in [OpenAI | PPO](https://spinningup.openai.com/en/latest/algorithms/ppo.html): 
+"PPO is motivated by the same question as TRPO: how can we take the biggest possible improvement step on a policy using the data we currently have, without stepping so far that we accidentally cause performance collapse? Where TRPO tries to solve this problem with a complex second-order method, PPO is a family of first-order methods that use a few other tricks to keep new policies close to old. PPO methods are significantly simpler to implement, and empirically seem to perform at least as well as TRPO."
+
+Pseudo-code: 
+<img src="pics/trpo_1.png" width="700">
+
 
 
 ### Double DQN (2016)
@@ -253,22 +413,68 @@ In short, they took DDPG and:
 - Introduced the minimum operator to the target calculation
 - Made updates smoother
 - Added noise to the action selection process
+- Utilises deterministic policy gradient (DPG) update through $Q$ function
 
 And by that got SOTA results.
 
 
 ### SAC (2018)
 
-- Paper: [Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor](https://proceedings.mlr.press/v80/haarnoja18b/haarnoja18b.pdf)
+- Papers & Sources: 
+  - [paper | Soft Actor-Critic: Off-Policy Maximum Entropy Deep Reinforcement Learning with a Stochastic Actor](https://proceedings.mlr.press/v80/haarnoja18b/haarnoja18b.pdf)
+  - [paper | ACTOR LOSS OF SOFT ACTOR CRITIC EXPLAINED](https://arxiv.org/pdf/2112.15568)
+  - [youtube | Entropy, Cross-Entropy and KL-Divergence](https://www.youtube.com/watch?v=ErfnhcEV1O8)
+  - [wiki | Kullback–Leibler divergence](https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence)
+  - [youtube | Reparameterization Trick](https://www.youtube.com/watch?v=xL1BJBarzWI)
+  - [OpenAI | SAC](https://spinningup.openai.com/en/latest/algorithms/sac.html)
+- Env: Mujoco
 - Code:
   - [Medium | TD3](https://medium.com/geekculture/a-deep-dive-into-the-ddpg-algorithm-for-continuous-control-2718222c333e)
   - [colab | SAC](https://colab.research.google.com/github/nikhilbarhate99/PPO-PyTorch/blob/master/PPO_colab.ipynb#scrollTo=Z4VJcUT2GlJz) ([github](https://github.com/nikhilbarhate99/PPO-PyTorch/blob/master/PPO.py))
   - [cleanrl | SAC](https://github.com/vwxyzjn/cleanrl/blob/master/cleanrl/ppo_continuous_action.py) ([github](https://github.com/vwxyzjn/cleanrl/blob/master/cleanrl/sac_continuous_action.py))
   - [Medium | SAC](https://towardsdatascience.com/soft-actor-critic-demystified-b8427df61665) ([github](https://github.com/vaishak2future/sac/blob/master/sac.ipynb))
 
+The previous methods have very high sample complexity (they require a lot of iterations to learn), like on-policy PPO, TRPO, or they are very sensitive to hyperparameters' changes, like an off-policy DDPG, TD3.
+
+This paper presents the _maximum-entropy RL_ framework.
+The main principle of this framework: **to succeed at the task while acting as randomly as possible**.
+The objective of the maximum-entropy RL is:
+
+<img src="pics/sac_1.png" width="300">
+
+For discounted case:
+
+<img src="pics/sac_2.png" width="500">
+
+The conventional RL objective can be recovered if $\alpha=0$.
+The advantages of the new objective are:
+- the policy explored more widely
+- the policy captures more similar optimal behaviours
+
+In order to derive the gradient for the policy network, the authors first used KL divergence to build the following estimator:
+
+<img src="pics/sac_3.png" width="700">
+
+Then, they used the reparametrization trick to simplify the gradient propagation and to reduce the sampling from it completely:
+
+<img src="pics/sac_4.png" width="700">
+
+**Reparametrization Trick**:
+The idea is as follows. You can sample a random variable from the parametrized distribution, let's say $a \sim N(\mu, \sigma)$, or to simple sample $\epsilon \sim N(0, 1)$ nad to apply the transformation $a = \mu + \sigma\epsilon$. In the second case, there is no need to calculate gradient for the distribution.
+
+The authors also used the findings of TD3 algorithm, and used the min of two $Q$ functions.
+
 Pseudo-code:
 
 <img src="pics/sac_v2.png" width="700">
+
+So, SAC:
+- Uses entropy inside its $Q$ functions to improve exploration
+- Utilises Replay Buffer to improve sample efficiency
+- Uses KL Divergence + Reparametrization Trick to traint policy
+- Utilises two $Q$ functions to get rid of positive bias, as in TD3
+- Uses an actor-critic setting
+- Utilises deterministic policy gradient (DPG) update through $Q$ function
 
 
 ### DreamerV3 (2023)
