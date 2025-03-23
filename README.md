@@ -9,23 +9,28 @@ Reinforcement Learning (RL) is a fascinating topic that captures my imagination 
 
 - Book: ["Reinforcement Learning: An Introduction" Richard S. Sutton and Andrew G. Barto](https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf)
 
+### Terms
+
+- `Multi-armed Bandits (MAB)` - a reinforcement learning problem where an agent sequentially selects actions (arms) to maximize cumulative rewards while balancing exploration and exploitation
+
 
 ### Mutli-armed Bandits 
 
-The Mutli-armed Bandits (MAB) problem is a simplified RL problem that is stateless. Through MAB, it is easier to illustrate some basic RL principles such as exploration-exploitation principle, Reward function, etc.
+Every RL class usually starts with the intro to the Multi-armed Bandits (MAB) problem.
+The MAB problem is a simplified RL problem that is stateless. Through MAB, it is easier to illustrate some basic RL principles such as exploration-exploitation principle, Reward function, evaluation techniques, etc.
 
-Incremental formula to update average reward:
+In this chaper, the authors present the incremental formula to update average reward:
 
 <img src="pics/rl_1.png" width="700">
 
-In general the updates in RL are mostly of the form:
+From here, the authors generalise the principle of updating estimates, as in RL we meet those kinds of updates everywhere. And they are mostly of the form:
 
 $$NewEstimate \leftarrow OldEstimate + StepSize [ Target - OldEstimate ] $$
 
 
 ### Dynamic Programming
 
-Dynamic Programming (DP) provides an essential foundation for the RL methods as those methods attempt to achive much the same effect as DP only with less computation and without assuming a perfect model of the env. Two most popular DP methods are Policy Iteration and Value Iteration are shown further.
+Dynamic Programming (DP) provides an essential foundation for all RL methods as those methods attempt to achieve much the same effect as DP only with less computation and without assuming a perfect model of the world. Two most popular DP methods are Policy Iteration and Value Iteration are shown further.
 
 Policy Iteration:
 
@@ -39,10 +44,13 @@ _Generalized Policy Iteration_ is a general idea of exchanging processes of poli
 
 <img src="pics/rl_4.png" width="700">
 
+This principal is one of the basic ideas underlying almost all RL approaches. Next, there are discussions of how properly to evaluate policies and to choose the best action, but the basic idea stays the same. To evaluate $\rightarrow$ to improve and to repeat those steps until convergence. 
+
 
 ### Monte Carlo Methods
 
-Here we do not assume any knowledge about the world model. Pure experience-based learning. I will show here some Monte Carlo (MC) control algorithms as well.
+On the other extreme from DP methods there are Monte Carlo methods. Here we do not assume any knowledge about the world model. Pure experience-based learning. I will show here some Monte Carlo (MC) control algorithms as well.
+THe idea is to gather experience  and to average out all valuable info and to improve policies with it.
 
 Example 1:
 
@@ -58,7 +66,7 @@ $$ E_{\pi}[Tr] = \sum_{i}\pi(i) \cdot Tr(i) = \sum_{i}b(i) \cdot \frac{\pi(i)}{b
 
 ### Temporal Difference Learning
 
-This is a central and novel idea that RL introduces to the world - Temporal-Difference (TD) learning.
+This is a central and novel idea that RL introduces to the world - Temporal-Difference (TD) learning. If falls somewhere between the DP and MC methods: no explicit model of the world, but also no need to wait until end of the episode each time to make an update.
 In TD-learning the algorithms use the estimation of subsequent states in order to evaluate current state - they bootstrap.
 
 Sarsa Algorithm:
@@ -83,15 +91,18 @@ Model-based tabular algorithm example:
 
 ### Dimensions
 
+Here is the picture from the book that summarises the connection between all aforementioned methods and gives general structure of the algorithms' world.
+
 <img src="pics/rl_12.png" width="700">
 
 ### RL with Approximation
 
+Here starts the second part of the book that introduces approximation functions such as NNs to the RL field.
 One of the key differences of approximation functions from tabular methods is that here, when a singe state is updated, the change generalises from that state affect the values of many other states.
 Another interesting fact is that here there are no states that will be visited twice, i.e. all states are unique. Si we need to generalise efficiently in order to find good policy.
-Because of this generalisation issue the learning eventually may become faster than in tabular methods, oncw again each state-update changes the values of numerous other states.
+Because of this generalisation issue the learning eventually may become faster than in tabular methods, once again each state-update changes the values of numerous other states.
 
-Example:
+ONe of the example algorithms from the book:
 
 <img src="pics/rl_13.png" width="700">
 
@@ -109,15 +120,19 @@ A totally new approach at the time. Several advantages to the PG methods:
 
 **Policy Gradient Theorem**
 
+Policy Gradient Theorem is an important piece of theoretical knowledge that proves that we do not need to know the model of the world to derive gradient for policy.
+
 <img src="pics/rl_14.png" width="700">
 
 Based on the theorem the basic REINFORCE algorithm was developed.
-HEre the algorithm uses value function as a baseline for reducing variance during the training:
+Here the algorithm uses value function as a baseline for reducing variance during the training:
 
 <img src="pics/rl_15.png" width="700">
 
 Although  the REINFORCE method can use value function as a baseline we do not consider it to be _actor-critic_, because its state-value function is used only as a baseline, not as a critic.
-THat is, it is not used for bootstrapping - updating the value estimate for a state from the estimated values of subsequent states.
+That is, it is not used for bootstrapping - updating the value estimate for a state from the estimated values of subsequent states.
+
+And here is the example for actor-critic from the book:
 
 <img src="pics/rl_16.png" width="700">
 
