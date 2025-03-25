@@ -52,7 +52,7 @@ This principal is one of the basic ideas underlying almost all RL approaches. Ne
 ### Monte Carlo Methods
 
 On the other extreme from DP methods there are Monte Carlo methods. Here we do not assume any knowledge about the world model. Pure experience-based learning. I will show here some Monte Carlo (MC) control algorithms as well.
-THe idea is to gather experience  and to average out all valuable info and to improve policies with it.
+The idea is to gather experience  and to average out all valuable info and to improve policies with it.
 
 Example 1:
 
@@ -232,6 +232,7 @@ Discussion in [OpenAI | PPO](https://spinningup.openai.com/en/latest/algorithms/
 "PPO is motivated by the same question as TRPO: how can we take the biggest possible improvement step on a policy using the data we currently have, without stepping so far that we accidentally cause performance collapse? Where TRPO tries to solve this problem with a complex second-order method, PPO is a family of first-order methods that use a few other tricks to keep new policies close to old. PPO methods are significantly simpler to implement, and empirically seem to perform at least as well as TRPO."
 
 Pseudo-code: 
+
 <img src="pics/trpo_1.png" width="700">
 
 > Do the write step size with the wright constraints on it for policy improvement in on-policy methods, and it will work great.
@@ -249,7 +250,7 @@ The phenomenon is known as _maximisation bias_. A visual toy example:
 <img src="pics/double_3.png" width="500">
 
 Overestimation of some states by itself maybe not a problem, and even it sometimes helps for exploration. But if the higher values are not well distributed between actions of higher values are on those actions that we do not need to explore anymore - that is a problem.
-There is a proof of theorem that, in DQN, sets the lower bound for the optimal $Q$ value estimation that is strictly bigger than optimal $V$ value of the state. THey are supposed to be equal, btw.
+There is a proof of theorem that, in DQN, sets the lower bound for the optimal $Q$ value estimation that is strictly bigger than optimal $V$ value of the state. They are supposed to be equal, btw.
 
 Double DQN replaces target $Y$ of DQN:
 
@@ -528,7 +529,7 @@ Very simple. The majority of the paper is focused on adapting this algorithm to 
 Unfortunately, the authors did not point out exactly was the algorithm so successful. Is it the scale? Is it the fact that the algorithm is model-based? Is it because numerous tricks for stabilisation? Or all of them combined?
 From my impression, the model of the world is the most critical part. If you can construct the world-model properly - it can benefit you a lot, as it is shown in the paper.
 
-THe overall schema of DreamerV3:
+The overall schema of DreamerV3:
 
 <img src="pics/dreamerv3_1.png" width="700">
 

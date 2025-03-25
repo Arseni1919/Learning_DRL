@@ -1,16 +1,16 @@
 digraph G {
-	graph [rankdir=TB,
+	graph [rankdir=BT,
 		size="10,10"
 	];
+	"TD-Learning" -> DQN;
+	"TD-Learning" -> REINFORCE;
 	DQN -> DoubleDQN	[minlen=1];
-	DoubleDQN -> TD3;
-	DoubleDQN -> SAC;
-	REINFORCE -> ActorCritic	[minlen=1];
-	ActorCritic -> DDPG	[label="off-policy"];
+	DQN -> DuelingDQN	[minlen=2];
+	REINFORCE -> ActorCritic;
 	ActorCritic -> TRPO	[label="on-policy"];
-	DPG -> DDPG	[minlen=1];
+	ActorCritic -> DPG	[label="off-policy"];
+	TRPO -> PPO	[minlen=1];
+	DPG -> DDPG;
 	DDPG -> TD3;
-	TD3 -> SAC;
-	TRPO -> SAC;
-	SAC -> SAC;
+	TD3 -> SAC	[minlen=1];
 }
