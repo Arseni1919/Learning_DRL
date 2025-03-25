@@ -232,6 +232,7 @@ Discussion in [OpenAI | PPO](https://spinningup.openai.com/en/latest/algorithms/
 "PPO is motivated by the same question as TRPO: how can we take the biggest possible improvement step on a policy using the data we currently have, without stepping so far that we accidentally cause performance collapse? Where TRPO tries to solve this problem with a complex second-order method, PPO is a family of first-order methods that use a few other tricks to keep new policies close to old. PPO methods are significantly simpler to implement, and empirically seem to perform at least as well as TRPO."
 
 Pseudo-code: 
+
 <img src="pics/trpo_1.png" width="700">
 
 > Do the write step size with the wright constraints on it for policy improvement in on-policy methods, and it will work great.
