@@ -1109,6 +1109,10 @@ if __name__ == '__main__':
 
 [Stable-Baselines3](https://stable-baselines3.readthedocs.io/en/master/index.html)
 
+### CleanRL
+
+[CleanRL](https://docs.cleanrl.dev/)
+
 
 [//]: # (##########################################################)
 [//]: # (##########################################################)
