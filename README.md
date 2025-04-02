@@ -18,7 +18,7 @@ Reinforcement Learning (RL) is a fascinating topic that captures my imagination 
 
 ### Mutli-armed Bandits 
 
-Every RL class usually starts with the intro to the Multi-armed Bandits (MAB) problem.
+Every RL course usually starts with the intro to the Multi-armed Bandits (MAB) problem.
 The MAB problem is a simplified RL problem that is stateless. Through MAB, it is easier to illustrate some basic RL principles such as exploration-exploitation principle, Reward function, evaluation techniques, etc.
 
 In this chaper, the authors present the incremental formula to update average reward:
@@ -83,7 +83,7 @@ Double Q-learning Algorithm:
 
 <img src="pics/rl_9.png" width="700">
 
-_$n$-step Bootstrapping_ algorithm example:
+$n$_-step Bootstrapping_ algorithm example:
 
 <img src="pics/rl_10.png" width="700">
 
@@ -101,10 +101,10 @@ Here is the picture from the book that summarises the connection between all afo
 
 Here starts the second part of the book that introduces approximation functions such as NNs to the RL field.
 One of the key differences of approximation functions from tabular methods is that here, when a singe state is updated, the change generalises from that state affect the values of many other states.
-Another interesting fact is that here there are no states that will be visited twice, i.e. all states are unique. Si we need to generalise efficiently in order to find good policy.
+Another interesting fact is that here there are no states that will be visited twice, i.e. all states are unique. So, we need to generalise efficiently in order to find good policy.
 Because of this generalisation issue the learning eventually may become faster than in tabular methods, once again each state-update changes the values of numerous other states.
 
-ONe of the example algorithms from the book:
+One of the example algorithms from the book:
 
 <img src="pics/rl_13.png" width="700">
 
