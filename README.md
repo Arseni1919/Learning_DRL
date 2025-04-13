@@ -4,6 +4,43 @@
 
 Reinforcement Learning (RL) is a fascinating topic that captures my imagination every single time I work on it. In this repo, I try to summarise the most basic principles, ideas, and algorithms of RL and Multi-agent RL. Of course, it is impossible to mention all important steps of the development of the field. For further research I attach links to other sources that will help you with the journey. 
 
+## Contents
+* [Reinforcement Learning Basics (Sutton & Barto RL Book and Other Sources)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#reinforcement-learning-basics-sutton--barto-rl-book-and-other-sources)
+* [RL Algorithms](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#rl-algorithms)
+  * [DQN (2013)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#dqn-2013)
+  * [DPG (2014)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#dpg-2014)
+  * [TRPO (2015)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#trpo-2015)
+  * [Double DQN (2016)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#double-dqn-2016)
+  * [DUeling DQN (2016)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#dueling-dqn-2016)
+  * [Actor-Critic (2016)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#actor-critic-2016)
+  * [DDPG (2016)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#ddpg-2016)
+  * [GAE (2016)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#gae-2016)
+  * [PPO (2017)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#ppo-2017)
+  * [TD3 (2018)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#td3-2018)
+  * [SAC (2018)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#sac-2018)
+  * [DreamerV3 (2023)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#dreamerv3-2023)
+  * [RL Algorithms Interconnections](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#rl-algorithms-interconnections)
+* [MARL Algorithms](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#marl-algorithms)
+  * [IQL (1993, 2015)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#iql-1993-2015)
+  * [VDN (2017)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#vdn-2017)
+  * [IAC and COMA (2018)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#iac-and-coma-2018)
+  * [QMIX (2018)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#qmix-2018)
+  * [QTRAN (2019)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#qtran-2019)
+  * [MAVEN (2019)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#maven-2019)
+  * [DGN (2020)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#dgn-2020)
+  * [IPPO (2022)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#ippo-2022)
+  * [ROMA (2020)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#roma-2020)
+  * [MADDPG (2020)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#maddpg-2020)
+  * [Qatten (2020)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#qatten-2020)
+  * [QPlex (2021)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#qplex-2021)
+  * [MAPPO (2022)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#mappo-2022)
+  * [Belief.-PPO (2023)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#belief-ppo-2023)
+  * [SHAQ (2023)](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#shaq-2023)
+* [Environments & Frameworks](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#environments--frameworks)
+* [Credits](https://github.com/Arseni1919/Learning_DRL?tab=readme-ov-file#credits)
+
+---
+
 [//]: # (##########################################################)
 [//]: # (##########################################################)
 [//]: # (##########################################################)
